@@ -81,6 +81,7 @@ async def on_member_join(member):
 
 # for testing
 @bot.command(name="testjoin")
+@commands.has_role("Mentor")
 async def testjoin(ctx):
     await join(ctx.message.author)
 
@@ -226,7 +227,7 @@ async def onboarding_help(ctx):
     # TODO: only do something if this is a private channel
     pass
 
-@bot.command(name='remove-roles')
+@bot.command(name='removeroles')
 @commands.has_role("Mentor")
 async def remove_roles(ctx):
     for role in ctx.guild.roles:
