@@ -13,9 +13,6 @@ from dotenv import load_dotenv
 load_dotenv()
 token = os.getenv('DISCORD_TOKEN')
 
-bot = commands.Bot('/')
-bot.remove_command("help")
-
 # Datatypes
 Person = recordclass("Person", ["name", "email", "preferred_name"])
 
@@ -42,21 +39,27 @@ pairs = [
 
 # TODO: Have a mentors map from mentor names to known user IDs?
 
-# global state
-# TODO: actually use this shelf, figure out how to close it later
-# keep in mind semantics with writeback
-# state_file = "state.shelf"
-# state = shelve.open(state_file)
+# Global state
+state_file = "state.shelf"
+state = shelve.open(state_file, writeback=True)
 
-# TODO: initialize these only if they don't already exist in the shelf
-events = []
-queue = []
+# initialize our state elements if they aren't in the shelf
+def shelf_init(key, val):
+    if key not in state:
+        state[key] = val
 
+shelf_init("events", [])
+shelf_init("queue", [])
 # student_map is a map from discord user IDs to students
-student_map = {}
-
+shelf_init("student_map", {})
 # ea_count is the number of times we've each other'd someone
-ea_count = 0
+shelf_init("ea_count", 0)
+
+# print our initial state
+print(state["events"])
+print(state["queue"])
+print(state["student_map"])
+print(state["ea_count"])
 
 # Get this student's partner
 def find_partner(name):
@@ -75,6 +78,16 @@ def find_mentor(name):
     else:
         return None
 
+# THE BOT
+# Custom Bot class to override close
+class Bot(commands.Bot):
+    async def close(self):
+        state.close()
+        await super().close()
+
+bot = Bot('/')
+bot.remove_command("help")
+
 @bot.event
 async def on_ready():
     # activity = discord.Game(name="Netflix")
@@ -84,7 +97,8 @@ async def on_ready():
 
 @bot.event
 async def on_member_join(member):
-    await join(member)
+    if member.id not in state["student_map"]:
+        await join(member)
 
 # for testing
 @bot.command(name="testjoin")
@@ -132,7 +146,7 @@ async def verify_email(member):
 
     # We found an email!
     # Preemptively add them to the student map
-    student_map[message.author.id] = s
+    state["student_map"][message.author.id] = s
     # Send back the user info so that they can verify it's correct
     msg = """
 Thanks for the info! I found someone with a matching email. Please confirm that this person is you by *reacting* with a thumbs up or thumbs down emoji.
@@ -156,7 +170,7 @@ You can do this by clicking/tapping the thumbs up/thumbs down buttons below this
     if str(reaction.emoji) == '👍':
         # Confirmed!
         confirm_msg = f"""
-Awesome! Welcome to SPIS, {student_map[message.author.id].name}!
+Awesome! Welcome to SPIS, {state["student_map"][message.author.id].name}!
 
 One last question: **What's your preferred name?** Please text the nickname you want other people to call you by; if you don't have one, just send your first name.
 
@@ -168,13 +182,13 @@ _(You can always change this later too!)_
 
         # Update their preferred name
         name_msg = await bot.wait_for("message")
-        student_map[message.author.id].preferred_name = name_msg.content
+        state["student_map"][message.author.id].preferred_name = name_msg.content
 
         # We first initialize their nickname
         # try so that it doesn't panic if we can't change nick (which won't
         # work for the server owner)
         try:
-            await member.edit(nick=f"{student_map[message.author.id].preferred_name} ({student_map[message.author.id].name})")
+            await member.edit(nick=f"{state['student_map'][message.author.id].preferred_name} ({state['student_map'][message.author.id].name})")
         except:
             pass
 
@@ -192,7 +206,7 @@ _(You can always change this later too!)_
 
 async def init_roles(member):
     # Get the student
-    s = student_map[member.id]
+    s = state["student_map"][member.id]
 
     # We don't use preferred names here since we might not have one for the
     # partner when creating these roles
@@ -269,16 +283,20 @@ async def check_events():
 
 @bot.event
 async def on_message(message):
-    global ea_count
     # What are we doing?
     if message.author.id != bot.user.id and what_doing(message.content):
-        ea_count += 1
-        await message.channel.send(f"each other! (count: {ea_count})")
+        state["ea_count"] += 1
+        await message.channel.send(f"each other! (count: {state['ea_count']})")
 
     await bot.process_commands(message)
 
 def what_doing(text):
     text = text.lower()
     return ("what are" in text or "what am" in text) and "doin" in text
+
+@bot.command(name='shutdown')
+@commands.has_role("Mentor")
+async def shutdown(ctx):
+    await bot.close()
 
 bot.run(token)
