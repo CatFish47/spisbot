@@ -3,6 +3,7 @@ import datetime as dt
 from enum import Enum
 import os
 import random
+import shelve
 
 import discord
 from discord.ext import commands, tasks
@@ -12,7 +13,6 @@ from dotenv import load_dotenv
 load_dotenv()
 token = os.getenv('DISCORD_TOKEN')
 
-# Bot init
 bot = commands.Bot('/')
 bot.remove_command("help")
 
@@ -43,13 +43,20 @@ pairs = [
 # TODO: Have a mentors map from mentor names to known user IDs?
 
 # global state
-# TODO: Keep track of these students using pickle/shelve so that we can persist
-# state across server restarts
+# TODO: actually use this shelf, figure out how to close it later
+# keep in mind semantics with writeback
+# state_file = "state.shelf"
+# state = shelve.open(state_file)
+
+# TODO: initialize these only if they don't already exist in the shelf
 events = []
 queue = []
 
 # student_map is a map from discord user IDs to students
 student_map = {}
+
+# ea_count is the number of times we've each other'd someone
+ea_count = 0
 
 # Get this student's partner
 def find_partner(name):
@@ -244,11 +251,11 @@ async def remove_roles(ctx):
 
 @bot.command(name='help')
 async def help(ctx):
-    embed = discord.Embed(title='Picobot General Help')
     desc = """
 This is where commands will go
 """
-    embed.set_footer(text="picobot 2020-07-22 | https://github.com/dcao/spisbot")
+    embed = discord.Embed(title='Picobot General Help', description=desc)
+    embed.set_footer(text="picobot 2020-07-23 | https://github.com/dcao/spisbot")
 
     await ctx.message.channel.send(embed=embed)
 
@@ -259,5 +266,19 @@ async def check_events():
     message_channel = bot.get_channel(channel_announcements)
     # TODO
     pass
+
+@bot.event
+async def on_message(message):
+    global ea_count
+    # What are we doing?
+    if message.author.id != bot.user.id and what_doing(message.content):
+        ea_count += 1
+        await message.channel.send(f"each other! (count: {ea_count})")
+
+    await bot.process_commands(message)
+
+def what_doing(text):
+    text = text.lower()
+    return ("what are" in text or "what am" in text) and "doin" in text
 
 bot.run(token)
