@@ -16,7 +16,7 @@ token = os.getenv('DISCORD_TOKEN')
 
 # Datatypes
 Person = recordclass("Person", ["name", "email", "preferred_name"])
-Ticket = recordclass("Ticket", "creator_id description state")
+Ticket = recordclass("Ticket", "creator_id description state mentor_id")
 TicketState = Enum("TicketState", "TODO PROG DONE")
 
 # Consts
@@ -299,7 +299,7 @@ async def init_roles(member):
 
 @bot.command(name='help')
 async def help(ctx, arg1=None):
-    footer = "picobot 2020-07-26 | https://github.com/dcao/spisbot"
+    footer = "picobot 2020-07-28 | https://github.com/dcao/spisbot"
 
     if arg1 == "tickets":
         desc = """
@@ -330,14 +330,6 @@ Picobot is the custom-made robot designed to help manage the SPIS 2020 Discord s
         embed.set_footer(text=footer)
 
         await ctx.message.channel.send(embed=embed)
-
-# Check if we have any events happening within the next hour.
-# If so, post in the announcements channel about it.
-@tasks.loop(hours=1)
-async def check_events():
-    message_channel = bot.get_channel(channel_announcements)
-    # TODO
-    pass
 
 # Get a random icebreaker question!
 @bot.command("icebreaker")
@@ -385,14 +377,13 @@ async def onboarding_help(ctx):
 def id_not_in_q(id):
     return id not in [x.creator_id for x in state["tickets"] if x.state != TicketState.DONE]
 
-# TODO; Limit mentors to accepting one at a time
 async def add_ticket(creator, description):
     # Someone just asked for help. We need to add a ticket!
-    t = Ticket(creator.id, description, TicketState.TODO)
+    t = Ticket(creator.id, description, TicketState.TODO, None)
     tid = len(state['tickets']) + 1
     state['tickets'].append(t)
 
-    embed = discord.Embed(title=f"Ticket #{tid}")
+    embed = discord.Embed(title=f"Ticket #{tid}", color=discord.Color.red())
     embed.add_field(name="Description", value=description, inline=False)
     if creator.id in state['student_map']:
         embed.add_field(name="Creator", value=state['student_map'][creator.id].name, inline=True)
@@ -415,7 +406,8 @@ async def add_ticket(creator, description):
             return ((get(bot.get_guild(guild_id).roles, name="Mentor") in user.roles
                      or get(bot.get_guild(guild_id).roles, name="Professor") in user.roles)
                     and reaction.message.id == msg.id
-                    and (str(reaction.emoji) == '👍' or str(reaction.emoji) == '☑️'))
+                    and ((str(reaction.emoji) == '👍' and user.id not in [x.mentor_id for x in state["tickets"] if x.state == TicketState.PROG])
+                         or str(reaction.emoji) == '☑️'))
 
         reaction, user = await bot.wait_for('reaction_add', check=check)
 
@@ -431,6 +423,8 @@ async def add_ticket(creator, description):
             await creator.send(embed=closed_embed)
 
             return
+
+        t.mentor_id = user.id
 
         if (hasattr(creator, 'voice')
                 and creator.voice is not None
@@ -453,6 +447,7 @@ async def add_ticket(creator, description):
 
         # Edit the original message to reflect the current mentor
         new_embed = discord.Embed(title=f"Ticket #{tid}")
+        new_embed.add_field(name="Current mentor", value=user.display_name, inline=False)
         new_embed.add_field(name="Description", value=description, inline=False)
         if creator.id in state['student_map']:
             new_embed.add_field(name="Creator", value=state['student_map'][creator.id].name, inline=True)
@@ -498,6 +493,8 @@ async def add_ticket(creator, description):
                 return
             else:
                 # This ticket isn't complete
+                t.mentor_id = None
+
                 # Set its embed back to the original embed
                 await msg.edit(embed=embed)
 
