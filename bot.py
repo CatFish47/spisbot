@@ -55,8 +55,7 @@ def shelf_init(key, val):
         state[key] = val
 
 shelf_init("events", [])
-# shelf_init("tickets", [])
-state["tickets"] = []
+shelf_init("tickets", [])
 # student_map is a map from discord user IDs to students
 shelf_init("student_map", {})
 # ea_count is the number of times we've each other'd someone
@@ -67,6 +66,10 @@ print(state["events"])
 print(state["tickets"])
 print(state["student_map"])
 print(state["ea_count"])
+
+##################
+# UTIL FUNCTIONS #
+##################
 
 # Get this student's partner
 def find_partner(name):
@@ -84,6 +87,9 @@ def find_mentor(name):
         return next((x for x in mentors if m == x.name), None)
     else:
         return None
+
+def is_private(channel):
+    return isinstance(channel, discord.abc.PrivateChannel)
 
 # THE BOT
 # Custom Bot class to override close
@@ -146,17 +152,26 @@ Now that that's out of the way, in order to let you talk in the Discord server, 
     await verify_email(member)
 
 async def verify_email(member):
+    # Note that wait_for fires when the bot sees *any* message; thus, we have to check that
+    # the same person sent this message via DMs.
     def email_check(m):
-        return member == m.author
+        return member == m.author and is_private(m.channel)
 
     # Wait for a reply.
     message = await bot.wait_for("message", check=email_check)
 
     s = next((x for x in students if x.email == message.content), None)
 
-    while not s:
-        msg = "I couldn't find a SPIS student with that email... please try again (and/or check your spelling)!"
-        await message.channel.send(msg)
+    while True:
+        if s in state["student_map"].values():
+            msg = "A SPIS student with that email already exists... please try again (and/or check your spelling)!"
+            await message.channel.send(msg)
+        elif not s:
+            msg = "I couldn't find a SPIS student with that email... please try again (and/or check your spelling)!"
+            await message.channel.send(msg)
+        else:
+            break
+
         message = await bot.wait_for("message", check=email_check)
         s = next((x for x in students if x.email == message.content), None)
 
@@ -173,13 +188,17 @@ You can do this by clicking/tapping the thumbs up/thumbs down buttons below this
     embed.add_field(name="Name", value=s.name, inline=False)
     embed.add_field(name="Email", value=s.email, inline=False)
 
-    reply = await message.channel.send(embed=embed)
+    reply = await member.send(embed=embed)
 
     await reply.add_reaction('👍')
     await reply.add_reaction('👎')
 
+    # The wait_for returns when *any* reaction is added anywhere; we have to make sure that
+    # we're reacting to the correct message
     def check(reaction, user):
-        return user == message.author and (str(reaction.emoji) == '👍' or str(reaction.emoji) == '👎')
+        return (user == message.author
+                and reaction.message.id == reply.id
+                and (str(reaction.emoji) == '👍' or str(reaction.emoji) == '👎'))
 
     reaction, user = await bot.wait_for('reaction_add', check=check)
 
@@ -192,10 +211,10 @@ _(You can always change this later too!)_
 """
 
         embed = discord.Embed(title="Preferred name", description=confirm_msg)
-        await message.channel.send(embed=embed)
+        await member.send(embed=embed)
 
         # Update their preferred name
-        name_msg = await bot.wait_for("message")
+        name_msg = await bot.wait_for("message", check=email_check)
         state["student_map"][message.author.id].preferred_name = name_msg.content
 
         # We first initialize their nickname
@@ -225,12 +244,13 @@ Beyond that, all there is to do now is to *jump in and start getting to know you
 Have fun, and welcome to SPIS!
 """
         embed = discord.Embed(title=f"Welcome to SPIS, {state['student_map'][message.author.id].preferred_name}", description=desc)
-        await message.channel.send(embed=embed)
+        await member.send(embed=embed)
 
     else:
         msg = """Sorry about that! Please type in another email."""
+        state["student_map"].pop(member.id, None)
 
-        await message.channel.send(msg)
+        await member.send(msg)
         await verify_email(member)
 
 async def init_roles(member):
@@ -258,9 +278,14 @@ async def init_roles(member):
     pair_name = f"pair--{min(n, p)}-{max(n, p)}"
     mentor_name = f"mentor--{m}"
 
-    if not get(member.guild.roles, name=pair_name):
-        pair_role = await member.guild.create_role(name=pair_name, colour=discord.Color.purple())
-        mentor_role = await member.guild.create_role(name=mentor_name, colour=discord.Color.dark_purple())
+    pair_role = get(member.guild.roles, name=pair_name)
+    pair_role = await member.guild.create_role(name=pair_name, colour=discord.Color.purple()) if not pair_role else pair_role
+
+    mentor_role = get(member.guild.roles, name=mentor_name)
+    mentor_role = await member.guild.create_role(name=mentor_name, colour=discord.Color.dark_purple()) if not mentor_role else mentor_role
+
+    # Add this student to the correct role
+    await member.add_roles(pair_role, mentor_role)
     
     # We also need to create a pair channel:
     labs = get(member.guild.categories, id=category_lab)
@@ -351,7 +376,7 @@ async def on_message(message):
 
 @bot.command(name='helpme')
 async def onboarding_help(ctx):
-    if (isinstance(ctx.channel, discord.abc.PrivateChannel)
+    if (is_private(ctx.channel)
             and id_not_in_q(ctx.message.author.id)
             and (ctx.author.id not in state['student_map']
                  or state['student_map'][ctx.author.id].preferred_name is None)):
@@ -360,6 +385,7 @@ async def onboarding_help(ctx):
 def id_not_in_q(id):
     return id not in [x.creator_id for x in state["tickets"] if x.state != TicketState.DONE]
 
+# TODO; Limit mentors to accepting one at a time
 async def add_ticket(creator, description):
     # Someone just asked for help. We need to add a ticket!
     t = Ticket(creator.id, description, TicketState.TODO)
@@ -387,7 +413,8 @@ async def add_ticket(creator, description):
     while not resolved:
         def check(reaction, user):
             return ((get(bot.get_guild(guild_id).roles, name="Mentor") in user.roles
-                    or get(bot.get_guild(guild_id).roles, name="Professor") in user.roles)
+                     or get(bot.get_guild(guild_id).roles, name="Professor") in user.roles)
+                    and reaction.message.id == msg.id
                     and (str(reaction.emoji) == '👍' or str(reaction.emoji) == '☑️'))
 
         reaction, user = await bot.wait_for('reaction_add', check=check)
@@ -425,15 +452,25 @@ async def add_ticket(creator, description):
         await creator.send(embed=accept_embed)
 
         # Edit the original message to reflect the current mentor
-        new_embed = embed.copy()
-        new_embed.add_field(name="Mentor", value=user.display_name)
+        new_embed = discord.Embed(title=f"Ticket #{tid}")
+        new_embed.add_field(name="Description", value=description, inline=False)
+        if creator.id in state['student_map']:
+            new_embed.add_field(name="Creator", value=state['student_map'][creator.id].name, inline=True)
+            new_embed.add_field(name="Partner", value=find_partner(state['student_map'][creator.id].name).name, inline=True)
+        else:
+            new_embed.add_field(name="Creator", value=creator.display_name, inline=True)
+
         await msg.edit(embed=new_embed)
 
         def add_check(reaction, ur):
-            return ur == user and str(reaction.emoji) == '☑️'
+            return (ur == user
+                    and reaction.message.id == msg.id
+                    and str(reaction.emoji) == '☑️')
 
         def remove_check(reaction, ur):
-            return ur == user and str(reaction.emoji) == '👍'
+            return (ur == user
+                    and reaction.message.id == msg.id
+                    and str(reaction.emoji) == '👍')
 
         # Wait for either unaccept or resolve
         pending = [bot.wait_for('reaction_add',check=add_check),
@@ -489,9 +526,9 @@ async def purge(ctx):
     await ctx.channel.purge()
 
 # Administrative commands - use with care!
-@bot.command(name='removeroles')
+@bot.command(name='resetroles')
 @commands.has_role("Mentor")
-async def remove_roles(ctx):
+async def reset_roles(ctx):
     for role in ctx.guild.roles:
         if role.name.startswith("pair--") or role.name.startswith("mentor--"):
             await role.delete()
@@ -503,6 +540,18 @@ async def remove_roles(ctx):
     for channel in ctx.guild.text_channels:
         if channel.name.startswith("pair--") or channel.name.startswith("mentor--"):
             await channel.delete()
+
+    # Reset the dictionary
+    state["student_map"] = {}
+
+    # Remove Mentee role
+    role_names = ("Mentee",)
+    roles = tuple(get(ctx.guild.roles, name=n) for n in role_names)
+    for m in ctx.guild.members:
+        try:
+            await m.remove_roles(*roles)
+        except:
+            print(f"Couldn't remove roles from {m}")
 
 @bot.command(name='shutdown')
 @commands.has_role("Mentor")
