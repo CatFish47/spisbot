@@ -54,7 +54,6 @@ def shelf_init(key, val):
     if key not in state:
         state[key] = val
 
-shelf_init("events", [])
 shelf_init("tickets", [])
 # student_map is a map from discord user IDs to students
 shelf_init("student_map", {})
@@ -62,7 +61,6 @@ shelf_init("student_map", {})
 shelf_init("ea_count", 0)
 
 # print our initial state
-print(state["events"])
 print(state["tickets"])
 print(state["student_map"])
 print(state["ea_count"])
@@ -389,7 +387,7 @@ async def add_ticket(creator, description):
         embed.add_field(name="Creator", value=state['student_map'][creator.id].name, inline=True)
         embed.add_field(name="Partner", value=find_partner(state['student_map'][creator.id].name).name, inline=True)
     else:
-        embed.add_field(name="Creator", value=creator.display_name, inline=True)
+        embed.add_field(name="Creator", value=f"<@!{creator.id}>", inline=True)
 
     msg = await bot.get_channel(channel_mentor_queue).send(embed=embed)
 
@@ -447,13 +445,13 @@ async def add_ticket(creator, description):
 
         # Edit the original message to reflect the current mentor
         new_embed = discord.Embed(title=f"Ticket #{tid}")
-        new_embed.add_field(name="Current mentor", value=user.display_name, inline=False)
+        new_embed.add_field(name="Current mentor", value=f"<@!{user.id}>", inline=False)
         new_embed.add_field(name="Description", value=description, inline=False)
         if creator.id in state['student_map']:
             new_embed.add_field(name="Creator", value=state['student_map'][creator.id].name, inline=True)
             new_embed.add_field(name="Partner", value=find_partner(state['student_map'][creator.id].name).name, inline=True)
         else:
-            new_embed.add_field(name="Creator", value=creator.display_name, inline=True)
+            new_embed.add_field(name="Creator", value=f"<@!{creator.id}>", inline=True)
 
         await msg.edit(embed=new_embed)
 
