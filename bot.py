@@ -14,38 +14,123 @@ from dotenv import load_dotenv
 load_dotenv()
 token = os.getenv('DISCORD_TOKEN')
 
-# Datatypes
-Person = recordclass("Person", ["name", "email", "preferred_name"])
+#############
+# DATATYPES #
+#############
+
 Ticket = recordclass("Ticket", "creator_id description state mentor_id")
 TicketState = Enum("TicketState", "TODO PROG DONE")
 
-# Consts
+class Mentee:
+    def __init__(self, first, last, preferred, email, partners, mentor, instr):
+        self.first = first
+        self.last = last
+        self.preferred = preferred
+        self.email = email
+        self.partners = partners
+        self.mentor = mentor
+        self.instr = instr
+
+class Mentor:
+    def __init__(self, first, last, preferred, email):
+        self.first = first
+        self.last = last
+        self.preferred = preferred
+        self.email = email
+
+    def mentees(self, students):
+        [x for x in students if x.mentor == self.email]
+
+##########
+# CONSTS #
+##########
+
 guild_id = 732094742447390732
 channel_announcements = 732480582822395945
 channel_mentor_queue = 735688058585874433
 channel_need_help = 736802874075512853
 category_lab = 732094742447390734
 
-# students is the list of SPIS students
-students = [
-    Person("David Cao", "dmcao@ucsd.edu", None),
-    Person("Ethan Tan", "ettan@ucsd.edu", None)
-]
+# students is a map from an email to the student info
+students = {
+    "vsastry@ucsd.edu": Mentee("Vibha", "Sastry", "Vibha", "vsastry@ucsd.edu", [], None, None),
+    "kgromero@ucsd.edu": Mentee("Katherine", "Romero", "Katherine", "kgromero@ucsd.edu", [], None, None),
+    "lmchen@ucsd.edu": Mentee("Lauren", "Chen", "Lauren", "lmchen@ucsd.edu", [], None, None),
+    "aolsen@ucsd.edu": Mentee("Alexander", "Olsen", "Alex", "aolsen@ucsd.edu", [], None, None),
+    "asierra@ucsd.edu": Mentee("Alyssa", "Sierra", "Alyssa", "asierra@ucsd.edu", [], None, None),
+    "dam001@ucsd.edu": Mentee("Diego", "Martinez", "Diego", "dam001@ucsd.edu", [], None, None),
+    "jftruong@ucsd.edu": Mentee("Jenelle", "Truong", "Jenelle", "jftruong@ucsd.edu", [], None, None),
+    "jrusso@ucsd.edu": Mentee("John-David", "Russo", "John-David", "jrusso@ucsd.edu", [], None, None),
+    "hluu@ucsd.edu": Mentee("Henry", "Luu", "Henry", "hluu@ucsd.edu", [], None, None),
+    "areljic@ucsd.edu": Mentee("Andrija", "Reljic", "Andrija", "areljic@ucsd.edu", [], None, None),
+    "jjdrisco@ucsd.edu": Mentee("John", "Driscoll", "John", "jjdrisco@ucsd.edu", [], None, None),
+    "bchester@ucsd.edu": Mentee("Bradley", "Chester", "Bradley", "bchester@ucsd.edu", [], None, None),
+    "h3tang@ucsd.edu": Mentee("Harry", "Tang", "Harry", "h3tang@ucsd.edu", [], None, None),
+    "yahmad@ucsd.edu": Mentee("Younus", "Ahmad", "Younus", "yahmad@ucsd.edu", [], None, None),
+    "mfrankne@ucsd.edu": Mentee("Misa", "Franknedy", "Misa", "mfrankne@ucsd.edu", [], None, None),
+    "spapanas@ucsd.edu": Mentee("Sruthi", "Papanasa", "Sruthi", "spapanas@ucsd.edu", [], None, None),
+    "ygupta@ucsd.edu": Mentee("Yukati", "Gupta", "Yukati", "ygupta@ucsd.edu", [], None, None),
+    "bdittric@ucsd.edu": Mentee("Benjamin", "Dittrich", "Benjamin", "bdittric@ucsd.edu", [], None, None),
+    "conti@ucsd.edu": Mentee("Sophia", "Conti", "Sophia", "conti@ucsd.edu", [], None, None),
+    "nnazeem@ucsd.edu": Mentee("Nihal", "Nazeem", "Nihal", "nnazeem@ucsd.edu", [], None, None),
+    "lmanzano@ucsd.edu": Mentee("Lindsey", "Manzano", "Lindsey", "lmanzano@ucsd.edu", [], None, None),
+    "jyliu@ucsd.edu": Mentee("Jeffrey", "Liu", "Jeffrey", "jyliu@ucsd.edu", [], None, None),
+    "n9patel@ucsd.edu": Mentee("Nikunjkumar", "Patel", "Nikunjkumar", "n9patel@ucsd.edu", [], None, None),
+    "falu@ucsd.edu": Mentee("Faith", "Lu", "Faith", "falu@ucsd.edu", [], None, None),
+    "ramartin@ucsd.edu": Mentee("Raul", "Martinez Beltran", "Raul", "ramartin@ucsd.edu", [], None, None),
+    "v3patel@ucsd.edu": Mentee("Vedant", "Patel", "Vedant", "v3patel@ucsd.edu", [], None, None),
+    "amsingh@ucsd.edu": Mentee("Amaan", "Singh", "Amaan", "amsingh@ucsd.edu", [], None, None),
+    "adjensen@ucsd.edu": Mentee("Alexander", "Jensen", "Alexander", "adjensen@ucsd.edu", [], None, None),
+    "cwl001@ucsd.edu": Mentee("Cody", "Lee", "Cody", "cwl001@ucsd.edu", [], None, None),
+    "nkarter@ucsd.edu": Mentee("Nathaniel", "Karter", "Nathan", "nkarter@ucsd.edu", [], None, None),
+    "abanwait@ucsd.edu": Mentee("Armaan", "Banwait", "Armaan", "abanwait@ucsd.edu", [], None, None),
+    "y4bao@ucsd.edu": Mentee("James", "Bao", "James", "y4bao@ucsd.edu", [], None, None),
+    "nkamalis@ucsd.edu": Mentee("Nima", "Kamali", "Nima", "nkamalis@ucsd.edu", [], None, None),
+    "cashby@ucsd.edu": Mentee("Celina", "Ashby", "Celina", "cashby@ucsd.edu", [], None, None),
+    "dpederso@ucsd.edu": Mentee("Deena", "Pederson", "Deena", "dpederso@ucsd.edu", [], None, None),
+    "shperry@ucsd.edu": Mentee("Sean", "Perry", "Sean", "shperry@ucsd.edu", [], None, None),
+    "j1wheele@ucsd.edu": Mentee("Jackson", "Wheeler", "Jackson", "j1wheele@ucsd.edu", [], None, None),
+    "d6le@ucsd.edu": Mentee("Don", "Le", "Don", "d6le@ucsd.edu", [], None, None),
+    "nfrankli@ucsd.edu": Mentee("Nathalie", "Franklin", "Nathalie", "nfrankli@ucsd.edu", [], None, None),
+    "lwtaylor@ucsd.edu": Mentee("Luke", "Taylor", "Luke", "lwtaylor@ucsd.edu", [], None, None),
+    "saramesh@ucsd.edu": Mentee("Shohan Aadithya", "Ramesh", "Shohan", "saramesh@ucsd.edu", [], None, None),
+    "tchui@ucsd.edu": Mentee("Theodore", "Hui", "Theodore", "tchui@ucsd.edu", [], None, None),
+    "gyuan@ucsd.edu": Mentee("Gavin", "Yuan", "Gavin", "gyuan@ucsd.edu", [], None, None),
+    "ssrinath@ucsd.edu": Mentee("Sidharth", "Srinath", "Sidharth", "ssrinath@ucsd.edu", [], None, None),
+    "b1ho@ucsd.edu": Mentee("Brandon", "Ho", "Brandon", "b1ho@ucsd.edu", [], None, None),
+    "tmt003@ucsd.edu": Mentee("Tuan", "Tran", "Tony", "tmt003@ucsd.edu", [], None, None),
+    "sttan@ucsd.edu": Mentee("Stephen", "Tan", "Stephen", "sttan@ucsd.edu", [], None, None),
+    "psankesh@ucsd.edu": Mentee("Pratheek", "Sankeshi", "Pratheek", "psankesh@ucsd.edu", [], None, None),
+    "kit002@ucsd.edu": Mentee("Kira", "Tran", "Kira", "kit002@ucsd.edu", [], None, None),
+    "hgrehm@ucsd.edu": Mentee("Hannah", "Grehm", "Hannah", "hgrehm@ucsd.edu", [], None, None),
+    "hxiao@ucsd.edu": Mentee("Henry", "Xiao", "Henry", "hxiao@ucsd.edu", [], None, None),
+    "tsalud@ucsd.edu": Mentee("Travis", "Salud", "Travis", "tsalud@ucsd.edu", [], None, None),
+    "alal@ucsd.edu": Mentee("Akshat", "Lal", "Akshat", "alal@ucsd.edu", [], None, None),
+    "axyu@ucsd.edu": Mentee("Aaron", "Yu", "Aaron", "axyu@ucsd.edu", [], None, None),
+}
 
-# mentors is the list of SPIS mentors
-mentors = [
-    Person("Mentor A", "mentora@ucsd.edu", "Mentor")
-]
+# mentors is the map from mentors' email to their info.
+mentors = {
+    "unn002@ucsd.edu": Mentor("Nhi", "Nguyen", "Nhi", "unn002@ucsd.edu"),
+    "clemarch@ucsd.edu": Mentor("Colin", "Lemarchand", "Colin", "clemarch@ucsd.edu"),
+    "melin@ucsd.edu": Mentor("Matias", "Lin", "Matias", "melin@ucsd.edu"),
+    "ejewik@ucsd.edu": Mentor("Emily", "Jewik", "Emily", "ejewik@ucsd.edu"),
+    "erxiao@ucsd.edu": Mentor("Eric", "Xiao", "Eric", "erxiao@ucsd.edu"),
+    "abruevic@ucsd.edu": Mentor("Alise", "Bruevich", "Alise", "abruevic@ucsd.edu"),
+    "ambar@ucsd.edu": Mentor("Amit", "Bar", "Amit", "ambar@ucsd.edu"),
+    "ddesu@ucsd.edu": Mentor("Dhanvi", "Desu", "Dhanvi", "ddesu@ucsd.edu"),
+    "tgarry@ucsd.edu": Mentor("Thomas", "Garry", "Thomas", "tgarry@ucsd.edu"),
+    "ettan@ucsd.edu": Mentor("Ethan", "Tan", "Ethan", "ettan@ucsd.edu"),
+    "lsteiner@ucsd.edu": Mentor("Lily", "Steiner", "Lily", "lsteiner@ucsd.edu"),
+    "l4gonzal@ucsd.edu": Mentor("Lailah", "Gonzalez", "Lailah", "l4gonzal@ucsd.edu"),
+    "akatwal@ucsd.edu": Mentor("Anisha", "Atwal", "Anisha", "akatwal@ucsd.edu"),
+    "acw011@ucsd.edu": Mentor("Alvin", "Wang", "Alvin", "acw011@ucsd.edu"),
+}
 
-# pairs is a list of tuples of the names of SPIS students who are paired,
-# along with the name of their mentor.
-pairs = [
-    ("David Cao", "Ethan Tan", "Mentor A")
-]
+################
+# GLOBAL STATE #
+################
 
-# TODO: Have a mentors map from mentor names to known user IDs?
-
-# Global state
 state_file = "state.shelf"
 state = shelve.open(state_file, writeback=True)
 
@@ -55,7 +140,7 @@ def shelf_init(key, val):
         state[key] = val
 
 shelf_init("tickets", [])
-# student_map is a map from discord user IDs to students
+# student_map is a map from discord user IDs to student emails
 shelf_init("student_map", {})
 # ea_count is the number of times we've each other'd someone
 shelf_init("ea_count", 0)
@@ -69,27 +154,13 @@ print(state["ea_count"])
 # UTIL FUNCTIONS #
 ##################
 
-# Get this student's partner
-def find_partner(name):
-    p = next((x for x in pairs if name == x[0] or name == x[1]), None)
-    n = p[0] if p[0] != name else p[1]
-    if p:
-        return next((x for x in students if n == x.name), None)
-    else:
-        return None
-
-# Get this student's mentor
-def find_mentor(name):
-    m = next((x[2] for x in pairs if name == x[0] or name == x[1]), None)
-    if m:
-        return next((x for x in mentors if m == x.name), None)
-    else:
-        return None
-
 def is_private(channel):
     return isinstance(channel, discord.abc.PrivateChannel)
 
-# THE BOT
+###########
+# THE BOT #
+###########
+
 # Custom Bot class to override close
 class Bot(commands.Bot):
     async def close(self):
@@ -158,24 +229,24 @@ async def verify_email(member):
     # Wait for a reply.
     message = await bot.wait_for("message", check=email_check)
 
-    s = next((x for x in students if x.email == message.content), None)
+    s = students.get(message.content)
 
     while True:
-        if s in state["student_map"].values():
-            msg = "A SPIS student with that email already exists... please try again (and/or check your spelling)!"
-            await message.channel.send(msg)
-        elif not s:
+        if not s:
             msg = "I couldn't find a SPIS student with that email... please try again (and/or check your spelling)!"
+            await message.channel.send(msg)
+        elif s.email in state["student_map"].values():
+            msg = "A SPIS student with that email already exists... please try again (and/or check your spelling)!"
             await message.channel.send(msg)
         else:
             break
 
         message = await bot.wait_for("message", check=email_check)
-        s = next((x for x in students if x.email == message.content), None)
+        s = students.get(message.content)
 
     # We found an email!
-    # Preemptively add them to the student map
-    state["student_map"][message.author.id] = s
+    # Preemptively add it to the student map
+    state["student_map"][message.author.id] = s.email
     # Send back the user info so that they can verify it's correct
     msg = """
 Thanks for the info! I found someone with a matching email. Please confirm that this person is you by *reacting* with a thumbs up or thumbs down emoji.
@@ -183,8 +254,9 @@ You can do this by clicking/tapping the thumbs up/thumbs down buttons below this
 """
 
     embed = discord.Embed(title="Student info confirmation", description=msg)
-    embed.add_field(name="Name", value=s.name, inline=False)
-    embed.add_field(name="Email", value=s.email, inline=False)
+    embed.add_field(name="Name", value=f"{s.first} {s.last}")
+    embed.add_field(name="Preferred name", value=f"{s.preferred}")
+    embed.add_field(name="Email", value=s.email)
 
     reply = await member.send(embed=embed)
 
@@ -198,28 +270,16 @@ You can do this by clicking/tapping the thumbs up/thumbs down buttons below this
                 and reaction.message.id == reply.id
                 and (str(reaction.emoji) == '👍' or str(reaction.emoji) == '👎'))
 
-    reaction, user = await bot.wait_for('reaction_add', check=check)
+    reaction, _ = await bot.wait_for('reaction_add', check=check)
 
     if str(reaction.emoji) == '👍':
         # Confirmed!
-        confirm_msg = f"""
-Awesome! One last question: **What's your preferred name?** Please text the nickname you want other people to call you by; if you don't have one, just send your first name.
-
-_(You can always change this later too!)_
-"""
-
-        embed = discord.Embed(title="Preferred name", description=confirm_msg)
-        await member.send(embed=embed)
-
-        # Update their preferred name
-        name_msg = await bot.wait_for("message", check=email_check)
-        state["student_map"][message.author.id].preferred_name = name_msg.content
 
         # We first initialize their nickname
         # try so that it doesn't panic if we can't change nick (which won't
         # work for the server owner)
         try:
-            await member.edit(nick=f"{state['student_map'][message.author.id].preferred_name} ({state['student_map'][message.author.id].name})")
+            await member.edit(nick=f"{s.preferred}")
         except:
             pass
 
@@ -227,7 +287,7 @@ _(You can always change this later too!)_
         await init_roles(member)
 
         desc = f"""
-Congrats! You've finished the first-time setup. It's nice to meet you, {state['student_map'][message.author.id].preferred_name} :)
+Congrats! You've finished the first-time setup. It's nice to meet you, {s.preferred} :)
 
 Now that we've verified who you are, you now have access to all of the different text and voice chats in the Discord server. Eventually, we'll be showing you how to use all these different parts of the server through live walkthroughs and write-ups.
 
@@ -235,13 +295,12 @@ For now, you should read through the different informational text channels we ha
 
 - `#discord-info` has more information on what each of the channels in the Discord server are for.
 - `#announcements` contains SPIS-wide announcements regarding assignment deadlines and other urgent info.
-- `#useful-links` contains links to useful resources, e.g. the SPIS website and Piazza pages.
 
-Beyond that, all there is to do now is to *jump in and start getting to know your mentors and your fellow mentees!* Our general text chat for hanging out is (appropriately) called `#hanging-out`, so hop on and introduce yourself!
+Beyond that, all there is to do now is to **jump in and start getting to know your mentors and your fellow mentees!** Our general text chat for hanging out is (appropriately) called `#hanging-out`, so hop on and introduce yourself!
 
 Have fun, and welcome to SPIS!
 """
-        embed = discord.Embed(title=f"Welcome to SPIS, {state['student_map'][message.author.id].preferred_name}", description=desc)
+        embed = discord.Embed(title=f"Welcome to SPIS, {s.preferred}", description=desc)
         await member.send(embed=embed)
 
     else:
@@ -253,19 +312,17 @@ Have fun, and welcome to SPIS!
 
 async def init_roles(member):
     # Get the student
-    s = state["student_map"][member.id]
+    s = students[state["student_map"][member.id]]
 
-    # We don't use preferred names here since we might not have one for the
-    # partner when creating these roles
+    # Get their email username
+    su = s.email.split('@')[0].lower()
 
-    # Get their name
-    n = s.email.split('@')[0].lower()
+    # For each of the student's partners:
+    # Get their joined names
+    n = "-".join(sorted([su] + [x.email.split('@')[0].lower() for x in s.partners]))
 
-    # Get their partner
-    p = find_partner(s.name).email.split('@')[0].lower()
-
-    # Get their mentor
-    m = find_mentor(s.name).email.split('@')[0].lower()
+    # Get their mentor, if exists
+    m = s.mentor.split('@')[0].lower() if s.mentor != None else None
 
     # Make the student a Mentee
     await member.add_roles(get(member.guild.roles, name="Mentee"))
@@ -273,18 +330,17 @@ async def init_roles(member):
     # We need to create two roles:
     # pair-{min(s, p)}-{max(s, p)}
     # mentor-{mentor}
-    pair_name = f"pair--{min(n, p)}-{max(n, p)}"
-    mentor_name = f"mentor--{m}"
-
+    pair_name = f"pair--{n}"
     pair_role = get(member.guild.roles, name=pair_name)
     pair_role = await member.guild.create_role(name=pair_name, colour=discord.Color.purple()) if not pair_role else pair_role
+    await member.add_roles(pair_role)
 
-    mentor_role = get(member.guild.roles, name=mentor_name)
-    mentor_role = await member.guild.create_role(name=mentor_name, colour=discord.Color.dark_purple()) if not mentor_role else mentor_role
+    if m:
+        mentor_name = f"mentor--{m}"
+        mentor_role = get(member.guild.roles, name=mentor_name)
+        mentor_role = await member.guild.create_role(name=mentor_name, colour=discord.Color.dark_purple()) if not mentor_role else mentor_role
+        await member.add_roles(mentor_role)
 
-    # Add this student to the correct role
-    await member.add_roles(pair_role, mentor_role)
-    
     # We also need to create a pair channel:
     labs = get(member.guild.categories, id=category_lab)
 
@@ -369,7 +425,7 @@ async def onboarding_help(ctx):
     if (is_private(ctx.channel)
             and id_not_in_q(ctx.message.author.id)
             and (ctx.author.id not in state['student_map']
-                 or state['student_map'][ctx.author.id].preferred_name is None)):
+                 or students[state['student_map'][ctx.author.id]].preferred is None)):
         await add_ticket(ctx.message.author, "Needs help with onboarding")
 
 def id_not_in_q(id):
@@ -384,8 +440,9 @@ async def add_ticket(creator, description):
     embed = discord.Embed(title=f"Ticket #{tid}", color=discord.Color.red())
     embed.add_field(name="Description", value=description, inline=False)
     if creator.id in state['student_map']:
-        embed.add_field(name="Creator", value=state['student_map'][creator.id].name, inline=True)
-        embed.add_field(name="Partner", value=find_partner(state['student_map'][creator.id].name).name, inline=True)
+        embed.add_field(name="Creator", value=students[state['student_map'][creator.id]].name, inline=True)
+        for i, p in students[state["student_map"][creator.id]].partners:
+            embed.add_field(name=f"Partner {i}", value=students[p].name, inline=True)
     else:
         embed.add_field(name="Creator", value=f"<@!{creator.id}>", inline=True)
 
@@ -448,8 +505,9 @@ async def add_ticket(creator, description):
         new_embed.add_field(name="Current mentor", value=f"<@!{user.id}>", inline=False)
         new_embed.add_field(name="Description", value=description, inline=False)
         if creator.id in state['student_map']:
-            new_embed.add_field(name="Creator", value=state['student_map'][creator.id].name, inline=True)
-            new_embed.add_field(name="Partner", value=find_partner(state['student_map'][creator.id].name).name, inline=True)
+            new_embed.add_field(name="Creator", value=students[state['student_map'][creator.id]].name, inline=True)
+            for i, p in students[state["student_map"][creator.id]].partners:
+                new_embed.add_field(name=f"Partner {i}", value=students[p].name, inline=True)
         else:
             new_embed.add_field(name="Creator", value=f"<@!{creator.id}>", inline=True)
 
@@ -521,9 +579,16 @@ async def purge(ctx):
     await ctx.channel.purge()
 
 # Administrative commands - use with care!
-@bot.command(name='resetroles')
+@bot.command(name='syncroles')
 @commands.has_role("Mentor")
-async def reset_roles(ctx):
+async def sync_roles(ctx):
+    # TODO: sync roles in server with our data from
+    # partner_map/mentor_map/instr_map
+    pass
+
+@bot.command(name='purgeroles')
+@commands.has_role("Mentor")
+async def purge_roles(ctx):
     for role in ctx.guild.roles:
         if role.name.startswith("pair--") or role.name.startswith("mentor--"):
             await role.delete()
