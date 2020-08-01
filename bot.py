@@ -1,4 +1,5 @@
 import asyncio
+from collections import defaultdict
 import datetime as dt
 from enum import Enum
 import itertools as it
@@ -83,19 +84,19 @@ category_lab = 732094742447390734
 # students is a map from an email to the student info
 students = {
     "vsastry@ucsd.edu": Mentee(
-        "Vibha", "Sastry", "Vibha", "vsastry@ucsd.edu", [], None, None
+        "Vibha", "Sastry", "Vibha", "vsastry@ucsd.edu", [], None, None,
     ),
     "kgromero@ucsd.edu": Mentee(
-        "Katherine", "Romero", "Katherine", "kgromero@ucsd.edu", [], None, None
+        "Katherine", "Romero", "Katherine", "kgromero@ucsd.edu", [], None, None,
     ),
     "lmchen@ucsd.edu": Mentee(
         "Lauren", "Chen", "Lauren", "lmchen@ucsd.edu", [], None, None
     ),
     "aolsen@ucsd.edu": Mentee(
-        "Alexander", "Olsen", "Alex", "aolsen@ucsd.edu", [], None, None
+        "Alexander", "Olsen", "Alex", "aolsen@ucsd.edu", [], None, None,
     ),
     "asierra@ucsd.edu": Mentee(
-        "Alyssa", "Sierra", "Alyssa", "asierra@ucsd.edu", [], None, None
+        "Alyssa", "Sierra", "Alyssa", "asierra@ucsd.edu", [], None, None,
     ),
     "dam001@ucsd.edu": Mentee(
         "Diego", "Martinez", "Diego", "dam001@ucsd.edu", [], None, None
@@ -293,15 +294,22 @@ def in_voice_channel(ctx):  # check to make sure ctx.author.voice.channel exists
     return ctx.author.voice and ctx.author.voice.channel
 
 
-def chunks(lst, n):
-    """Yield successive n-sized chunks from lst."""
-    for i in range(0, len(lst), n):
-        yield lst[i : i + n]
+def chunks(l, n):
+    """Yield n number of striped chunks from l."""
+    for i in range(0, n):
+        yield l[i::n]
 
 
 def has_role(guild, member, **kwargs):
     role = get(guild.roles, **kwargs)
     return role in member.roles
+
+
+def full_group_by(l, key=lambda x: x):
+    d = defaultdict(list)
+    for item in l:
+        d[key(item)].append(item)
+    return d.items()
 
 
 ###########
@@ -792,11 +800,9 @@ async def breakout(ctx, arg=None):
         split_mentees = list(chunks(mentees, groups))
         split_admins = list(chunks(admins, groups))
 
-        # Pad the lists, in case one isn't long enough
-        split_mentees += [[]] * (groups - len(split_mentees))
-        split_admins += [[]] * (groups - len(split_admins))
-
-        split_members = [x + y for x, y in zip(split_admins, split_mentees)]
+        split_members = [
+            x + y for x, y in it.zip_longest(split_admins, split_mentees, fillvalue=[])
+        ]
 
     elif arg == "pair" or arg == "mentor" or arg == "prof":
         members = ctx.author.voice.channel.members
@@ -806,7 +812,7 @@ async def breakout(ctx, arg=None):
                 if role.name.startswith(f"{arg}--"):
                     return role.name
 
-        split_members = [list(x) for _, x in it.groupby(members, key=groupfn)]
+        split_members = full_group_by(members, key=groupfn)
 
     else:
         embed = discord.Embed(
