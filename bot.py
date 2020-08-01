@@ -481,7 +481,7 @@ async def init_roles(member):
     n = s.group_ident(students)
 
     # Get their mentor, if exists
-    m = s.mentor(mentors).ident() if s.mentor != None else None
+    m = s.mentor(mentors).ident() if s.mentor_email is not None else None
 
     # Make the student a Mentee
     await member.add_roles(get(member.guild.roles, name="Mentee"))
@@ -545,18 +545,12 @@ async def add_ticket(creator, description):
     embed = discord.Embed(
         title=f"#{tid}", description=description, color=discord.Color.red()
     )
+    embed.add_field(name="Creator", value=f"<@!{creator.id}>", inline=True)
     if creator.id in state["student_map"]:
-        embed.add_field(
-            name="Creator",
-            value=students[state["student_map"][creator.id]].name,
-            inline=True,
-        )
         for i, p in enumerate(
             students[state["student_map"][creator.id]].partners(students)
         ):
-            embed.add_field(name=f"Partner {i}", value=p.name, inline=True)
-    else:
-        embed.add_field(name="Creator", value=f"<@!{creator.id}>", inline=True)
+            embed.add_field(name=f"Partner {i}", value=p.preferred, inline=True)
 
     msg = await bot.get_channel(channel_mentor_queue).send(embed=embed)
 
@@ -642,20 +636,14 @@ async def add_ticket(creator, description):
         await creator.send(embed=accept_embed)
 
         # Edit the original message to reflect the current mentor
-        new_embed = discord.Embed(title=f"Ticket #{tid}", description=description)
+        new_embed = discord.Embed(title=f"#{tid}", description=description)
         new_embed.add_field(name="Current mentor", value=f"<@!{user.id}>", inline=False)
+        new_embed.add_field(name="Creator", value=f"<@!{creator.id}>", inline=True)
         if creator.id in state["student_map"]:
-            new_embed.add_field(
-                name="Creator",
-                value=students[state["student_map"][creator.id]].name,
-                inline=True,
-            )
             for i, p in enumerate(
                 students[state["student_map"][creator.id]].partners(students)
             ):
-                new_embed.add_field(name=f"Partner {i}", value=p.name, inline=True)
-        else:
-            new_embed.add_field(name="Creator", value=f"<@!{creator.id}>", inline=True)
+                new_embed.add_field(name=f"Partner {i}", value=p.preferred, inline=True)
 
         await msg.edit(embed=new_embed)
 
@@ -1003,17 +991,16 @@ async def sync_roles(ctx):
             await channel.delete()
 
     # Remove Mentee role
-    role_names = ("Mentee",)
-    roles = tuple(get(ctx.guild.roles, name=n) for n in role_names)
+    role = get(ctx.guild.roles, name="Mentee")
     for m in ctx.guild.members:
         try:
-            await m.remove_roles(*roles)
+            await m.remove_roles(role)
         except:
             print(f"Couldn't remove roles from {m}")
 
     # We then re-add everything based on our internal state and consts
     for disc_id in state["student_map"].keys():
-        init_roles(bot.get_guild(guild_id).get_member(disc_id))
+        await init_roles(bot.get_guild(guild_id).get_member(disc_id))
 
 
 @bot.command(name="purgeroles")
