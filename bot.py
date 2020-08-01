@@ -1,6 +1,7 @@
 import asyncio
 import datetime as dt
 from enum import Enum
+import itertools as it
 import os
 import random
 from recordclass import recordclass
@@ -76,6 +77,7 @@ guild_id = 732094742447390732
 channel_announcements = 732480582822395945
 channel_mentor_queue = 735688058585874433
 channel_need_help = 736802874075512853
+category_breakout = 738930321554407524
 category_lab = 732094742447390734
 
 # students is a map from an email to the student info
@@ -281,6 +283,21 @@ print(state["ea_count"])
 
 def is_private(channel):
     return isinstance(channel, discord.abc.PrivateChannel)
+
+
+def in_voice_channel(ctx):  # check to make sure ctx.author.voice.channel exists
+    return ctx.author.voice and ctx.author.voice.channel
+
+
+def chunks(lst, n):
+    """Yield successive n-sized chunks from lst."""
+    for i in range(0, len(lst), n):
+        yield lst[i : i + n]
+
+
+def has_role(guild, member, **kwargs):
+    role = get(guild.roles, **kwargs)
+    return role in member.roles
 
 
 ###########
@@ -522,7 +539,7 @@ async def add_ticket(creator, description):
     state["tickets"].append(t)
 
     embed = discord.Embed(
-        title=f"Ticket #{tid}", description=description, color=discord.Color.red()
+        title=f"#{tid}", description=description, color=discord.Color.red()
     )
     if creator.id in state["student_map"]:
         embed.add_field(
@@ -717,6 +734,104 @@ async def clear_tickets(ctx):
         x.state = TicketState.DONE
 
     await bot.get_channel(channel_mentor_queue).purge()
+
+
+#############
+# BREAKOUTS #
+#############
+
+
+def breakout_ident():
+    return "".join(random.choices("0123456789abcdef", k=3))
+
+
+def breakout_prefix(ident):
+    if ident is None:
+        return "breakout--"
+    else:
+        return f"breakout--{ident}-"
+
+
+@commands.check(in_voice_channel)
+@bot.command(name="recall")
+@commands.has_role("Mentor")
+async def recall(ctx, ident=None):
+    # We move everyone to the voice channel of the person who invoked recall
+    for member in ctx.guild.members:
+        if member.voice is not None and member.voice.channel is not None:
+            await member.move_to(ctx.author.voice.channel)
+
+    # If we have any breakout voice channels, we remove those too
+    for vc in ctx.guild.voice_channels:
+        prefix = breakout_prefix(ident)
+        if vc.name.startswith(prefix):
+            await vc.delete()
+
+
+@commands.check(in_voice_channel)
+@bot.command(name="breakout")
+@commands.has_role("Mentor")
+async def breakout(ctx, arg=None):
+    # arg is either a category (mentor, pair, etc.) or a number, denoting the max size of the randomly assigned breakout rooms
+    if arg is None:
+        embed = discord.Embed(
+            title="Couldn't create breakouts",
+            description="Please provide an argument to specify the number of breakouts (e.g. `/breakout 4`) or the category by which to create the breakouts (e.g. `/breakout mentor`, `/breakout pair`, or `/breakout prof`)",
+            color=discord.Color.red(),
+        )
+        await ctx.send(embed=embed)
+        return None
+
+    # We create a random identifier for this breakout session
+    ident = breakout_ident()
+    prefix = f"breakout--{ident}-"
+
+    split_members = []
+
+    # If dividing randomly:
+    if arg.isdigit():
+        groups = int(arg)
+        members = ctx.author.voice.channel.members
+        random.shuffle(members)
+
+        mentees = [x for x in members if has_role(ctx.guild, x, name="Mentee")]
+        admins = [x for x in members if not has_role(ctx.guild, x, name="Mentee")]
+
+        split_mentees = list(chunks(mentees, groups))
+        split_admins = list(chunks(admins, groups))
+
+        # Pad the lists, in case one isn't long enough
+        split_mentees += [[]] * (groups - len(split_mentees))
+        split_admins += [[]] * (groups - len(split_admins))
+
+        split_members = [x + y for x, y in zip(split_admins, split_mentees)]
+
+    elif arg == "pair" or arg == "mentor" or arg == "prof":
+        members = ctx.author.voice.channel.members
+
+        def groupfn(m):
+            for role in m.roles:
+                if role.name.startswith(f"{arg}--"):
+                    return role.name
+
+        split_members = [list(x) for _, x in it.groupby(members, key=groupfn)]
+
+    else:
+        embed = discord.Embed(
+            title="Couldn't create breakouts",
+            description="Please provide a valid argument to specify the number of breakouts (e.g. `/breakout 4`) or the category by which to create the breakouts (e.g. `/breakout mentor`, `/breakout pair`, or `/breakout prof`)",
+            color=discord.Color.red(),
+        )
+        await ctx.send(embed=embed)
+        return
+
+    for i, ms in enumerate(split_members):
+        # Create a breakout channel
+        breakout = get(ctx.guild.categories, id=category_breakout)
+
+        vc = await ctx.guild.create_voice_channel(f"{prefix}{i + 1}", category=breakout)
+        for m in ms:
+            await m.move_to(vc)
 
 
 #########
