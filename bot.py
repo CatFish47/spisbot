@@ -248,6 +248,10 @@ mentors = {
     "l4gonzal@ucsd.edu": Mentor("Lailah", "Gonzalez", "Lailah", "l4gonzal@ucsd.edu"),
     "akatwal@ucsd.edu": Mentor("Anisha", "Atwal", "Anisha", "akatwal@ucsd.edu"),
     "acw011@ucsd.edu": Mentor("Alvin", "Wang", "Alvin", "acw011@ucsd.edu"),
+    "agarza@ucsd.edu": Mentor("Alexander", "Garza", "Alex", "agarza@ucsd.edu"),
+    "dmcao@ucsd.edu": Mentor("David", "Cao", "David", "dmcao@ucsd.edu"),
+    "rpmclaug@ucsd.edu": Mentor("Ryan", "McLaughlin", "Ryan", "rpmclaug@ucsd.edu"),
+    "stn005@ucsd.edu": Mentor("Steven", "Nguyen", "Steven", "stn005@ucsd.edu"),
 }
 
 
