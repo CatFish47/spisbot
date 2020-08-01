@@ -937,6 +937,11 @@ async def icebreaker(ctx):
     await ctx.channel.send(random.choice(questions))
 
 
+@bot.command("emojify")
+async def emojify(ctx, arg):
+    letters = ['🇦', '🇧', '🇨', '🇩', '🇪', '🇫', '🇬', '🇭', '🇮', '🇯', '🇰', '🇱', '🇲', '🇳', '🇴', '🇵', '🇶', '🇷', '🇸', '🇹', '🇺', '🇻', '🇼', '🇽', '🇾', '🇿']
+    await ctx.send(' '.join([letters[ord(x) - 97] for x in arg.lower() if x.isalpha()]))
+
 def what_doing(text):
     text = text.lower()
     return ("what are" in text or "what am" in text) and "doin" in text
