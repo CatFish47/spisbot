@@ -125,14 +125,14 @@ students = {
         "John-David",
         "jrusso@ucsd.edu",
         ["hluu@ucsd.edu"],
-        "abruevic@ucsd.edu",
+        "dmcao@ucsd.edu",
         "niema",
     ),
     "hluu@ucsd.edu": Mentee(
         "Henry",
         "Luu",
         "Henry",
-        "hluu@ucsd.edu",
+        "dmcao@ucsd.edu",
         ["jrusso@ucsd.edu"],
         "abruevic@ucsd.edu",
         "niema",
@@ -1247,38 +1247,22 @@ async def start_poll(ctx, name=None, *args):
 
 
 @bot.command(name="help")
-async def help(ctx, arg1=None):
-    footer = "picobot 2020-07-31 | https://github.com/dcao/spisbot"
+async def help(ctx):
+    footer = "spisbot 2020-08-01 | https://github.com/dcao/spisbot"
 
-    if arg1 == "tickets":
-        desc = """
-To accept a ticket, **add a thumbs up reaction**. You can do this by clicking on the thumbs up button under the ticket.
-
-If you would like to later "unaccept" it, remove your thumbs up reaction by clicking the thumbs up again.
-
-If you would to resolve it, click the check mark reaction (or react with the `:ballot_box_with_check:` emoji).
-"""
-
-        embed = discord.Embed(title="Picobot Help | Tickets", description=desc)
-        embed.set_footer(text=footer)
-
-        await ctx.message.channel.send(embed=embed)
-    else:
-        desc = """
-Picobot is the custom-made robot designed to help manage the SPIS 2020 Discord server. While you can send me commands to make me do things, I'm also always sitting in the background to help welcome people to the SPIS server and manage queue tickets.
+    desc = """
+spisbot is the custom-made robot designed to help manage the SPIS 2020 Discord server. While you can send me commands to make me do things, I'm also always sitting in the background to help welcome people to the SPIS server and manage queue tickets.
 
 **General commands**
 
 - `/icebreaker`: returns a random icebreaker question. Good for getting to know your fellow mentees!
+- `/emojify <text>`: turns some text into emojis :)
 
-**Other help categories**
-
-- `/help tickets`: show help for managing queue tickets (intended for mentors only)
 """
-        embed = discord.Embed(title="Picobot Help", description=desc)
-        embed.set_footer(text=footer)
+    embed = discord.Embed(title="Picobot Help", description=desc)
+    embed.set_footer(text=footer)
 
-        await ctx.message.channel.send(embed=embed)
+    await ctx.message.channel.send(embed=embed)
 
 
 # Get a random icebreaker question!
