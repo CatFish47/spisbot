@@ -1248,7 +1248,7 @@ async def start_poll(ctx, name=None, *args):
 
 @bot.command(name="help")
 async def help(ctx):
-    footer = "spisbot 2020-08-01 | https://github.com/dcao/spisbot"
+    footer = "spisbot 2020-08-02 | https://github.com/dcao/spisbot"
 
     desc = """
 spisbot is the custom-made robot designed to help manage the SPIS 2020 Discord server. While you can send me commands to make me do things, I'm also always sitting in the background to help welcome people to the SPIS server and manage queue tickets.
@@ -1259,7 +1259,7 @@ spisbot is the custom-made robot designed to help manage the SPIS 2020 Discord s
 - `/emojify <text>`: turns some text into emojis :)
 
 """
-    embed = discord.Embed(title="Picobot Help", description=desc)
+    embed = discord.Embed(title="spisbot help", description=desc)
     embed.set_footer(text=footer)
 
     await ctx.message.channel.send(embed=embed)
