@@ -781,6 +781,8 @@ async def verify_email(member):
     msg = """
 Thanks for the info! I found someone with a matching email. Please confirm that this person is you by *reacting* with a thumbs up or thumbs down emoji.
 You can do this by clicking/tapping the thumbs up/thumbs down buttons below this message:
+
+_If the preferred name is incorrect, just let your mentor know and we'll fix it after opening day._
 """
 
     embed = discord.Embed(title="Student info confirmation", description=msg)
