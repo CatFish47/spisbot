@@ -45,7 +45,7 @@ class Mentee:
     # (i.e. the student and their partners)
     def group_ident(self, students):
         return "-".join(
-            sorted([self.ident()] + [students[x].ident() for x in self.partner_emails])
+            sorted([self.first] + [students[x].first for x in self.partner_emails])
         )
 
     def partners(self, students):
@@ -104,7 +104,7 @@ students = {
     "kgromero@ucsd.edu": Mentee(
         "Katherine",
         "Romero",
-        "Katherine",
+        "Kate",
         "kgromero@ucsd.edu",
         ["aolsen@ucsd.edu"],
         "abruevic@ucsd.edu",
@@ -122,7 +122,7 @@ students = {
     "jrusso@ucsd.edu": Mentee(
         "John-David",
         "Russo",
-        "John-David",
+        "JD",
         "jrusso@ucsd.edu",
         ["hluu@ucsd.edu"],
         "dmcao@ucsd.edu",
@@ -132,9 +132,9 @@ students = {
         "Henry",
         "Luu",
         "Henry",
-        "dmcao@ucsd.edu",
+        "hluu@ucsd.edu",
         ["jrusso@ucsd.edu"],
-        "abruevic@ucsd.edu",
+        "dmcao@ucsd.edu",
         "niema",
     ),
     "asierra@ucsd.edu": Mentee(
@@ -245,11 +245,11 @@ students = {
         "acw011@ucsd.edu",
         "gary",
     ),
-    "conti@ucsd.edu": Mentee(
+    "sconti@ucsd.edu": Mentee(
         "Sophia",
         "Conti",
         "Sophia",
-        "conti@ucsd.edu",
+        "sconti@ucsd.edu",
         ["nnazeem@ucsd.edu"],
         "l4gonzal@ucsd.edu",
         "curt",
@@ -259,7 +259,7 @@ students = {
         "Nazeem",
         "Nihal",
         "nnazeem@ucsd.edu",
-        ["conti@ucsd.edu"],
+        ["sconti@ucsd.edu"],
         "l4gonzal@ucsd.edu",
         "curt",
     ),
@@ -329,7 +329,7 @@ students = {
     "n9patel@ucsd.edu": Mentee(
         "Nikunjkumar",
         "Patel",
-        "Nikunjkumar",
+        "Nikunj",
         "n9patel@ucsd.edu",
         ["falu@ucsd.edu"],
         "unn002@ucsd.edu",
@@ -693,6 +693,7 @@ def fmt_students():
 
     return res
 
+
 @bot.command("verifystate")
 @commands.has_role("Mentor")
 async def verify_state(ctx):
@@ -853,7 +854,7 @@ async def init_roles(member):
     n = s.group_ident(students)
 
     # Get their mentor, if exists
-    m = s.mentor(mentors).ident() if s.mentor_email is not None else None
+    m = s.mentor(mentors).first if s.mentor_email is not None else None
 
     # Make the student a Mentee
     await member.add_roles(get(member.guild.roles, name="Mentee"))
@@ -1094,8 +1095,7 @@ async def off_duty(ctx):
 @bot.command(name="cleartickets")
 @commands.has_role("Mentor")
 async def clear_tickets(ctx):
-    for x in state["tickets"]:
-        x.state = TicketState.DONE
+    state["tickets"] = []
 
     await bot.get_channel(channel_mentor_queue).purge()
 
@@ -1361,6 +1361,51 @@ async def purge(ctx):
     await ctx.channel.purge()
 
 
+@bot.command(name="rmuser")
+@commands.has_role("Mentor")
+async def rm_user(ctx, uid):
+    uid = int(uid)
+    state["student_map"].pop(uid, None)
+
+    m = bot.get_guild(guild_id).get_member(uid)
+
+    await m.remove_roles(*(m.roles))
+
+
+@bot.command(name="adduser")
+@commands.has_role("Mentor")
+async def add_user(ctx, uid, email):
+    uid = int(uid)
+    state["student_map"][uid] = email
+
+    m = bot.get_guild(guild_id).get_member(uid)
+
+    await init_roles(m)
+
+
+@bot.command(name="userinfo")
+@commands.has_role("Mentor")
+async def user_info(ctx, uid):
+    for k, v in state["student_map"].items():
+        if str(k) == uid or v == uid:
+            s = students[state["student_map"][int(uid)]] if str(k) == uid else students[v]
+
+            embed = discord.Embed(title=f"{s.first} {s.last} ({s.preferred})")
+            embed.add_field(name="Mentor", value=s.mentor(mentors).first)
+            embed.add_field(name="Email", value=s.email)
+            embed.add_field(name="Instr", value=s.instr)
+            embed.add_field(name="Group ident", value=s.group_ident(students))
+
+            for i, p in enumerate(s.partners(students)):
+                embed.add_field(name=f"Partner {i}", value=p.preferred)
+
+            await ctx.send(embed=embed)
+            return
+    
+    embed = discord.Embed(title="User not found")
+    await ctx.send(embed=embed)
+
+
 @bot.command(name="syncroles")
 @commands.has_role("Mentor")
 async def sync_roles(ctx):
@@ -1388,6 +1433,8 @@ async def sync_roles(ctx):
     # We then re-add everything based on our internal state and consts
     for disc_id in state["student_map"].keys():
         await init_roles(bot.get_guild(guild_id).get_member(disc_id))
+
+    print("sync complete")
 
 
 @bot.command(name="purgeroles")
