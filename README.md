@@ -7,6 +7,8 @@ At the moment, it provides the following features:
 
 - A **ticket queue system** (a la Autograder)
 
+- **Breakout rooms** based on role or group size.
+
 ## LICENSE
 
 Licensed under [MIT](./LICENSE).

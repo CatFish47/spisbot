@@ -74,7 +74,6 @@ class Mentor:
 # CONSTS #
 ##########
 
-guild_id = 732094742447390732
 channel_announcements = 732480582822395945
 channel_mentor_queue = 735688058585874433
 channel_need_help = 736802874075512853
@@ -724,8 +723,6 @@ Yo yo yo! Welcome to SPIS 2020. I'm **Picobot**, an automated bot here to help m
 
 For now, I'm here to help welcome you to the SPIS 2020 Discord server. You'll notice that as of right now, you can't type in any of the channels. Don't worry; this is so that we can protect ourselves against random people from joining our server, and so that we can verify who you are before you can talk in the Discord. Before you can get started and hang out with everyone else, I need to know who you are first.
 
-If you need help at any point, just text me the word `/helpme` (with the slash!) and a mentor will come and help you. In case this bot breaks or you want to contact us directly, feel free to email any one of the mentors (our emails are on the SPIS People page).
-
 With that being said, let's get started!
 """
 
@@ -909,7 +906,7 @@ def id_not_in_q(id):
     ]
 
 
-async def add_ticket(creator, description):
+async def add_ticket(creator, description, admin_roles):
     # Someone just asked for help. We need to add a ticket!
     t = Ticket(creator.id, description, TicketState.TODO, None)
     tid = len(state["tickets"]) + 1
@@ -942,11 +939,7 @@ async def add_ticket(creator, description):
 
         def check(reaction, user):
             return (
-                (
-                    get(bot.get_guild(guild_id).roles, name="Mentor") in user.roles
-                    or get(bot.get_guild(guild_id).roles, name="Professor")
-                    in user.roles
-                )
+                any([x in user.roles for x in admin_roles])
                 and reaction.message.id == msg.id
                 and (
                     (
@@ -1113,7 +1106,7 @@ def breakout_prefix(ident):
     if ident is None:
         return "breakout--"
     else:
-        return f"breakout--{ident}-"
+        return f"breakout--{ident}"
 
 
 @commands.check(in_voice_channel)
@@ -1147,8 +1140,7 @@ async def breakout(ctx, arg=None):
         return None
 
     # We create a random identifier for this breakout session
-    ident = breakout_ident()
-    prefix = f"breakout--{ident}-"
+    prefix = breakout_prefix(breakout_ident())
 
     split_members = []
 
@@ -1191,7 +1183,7 @@ async def breakout(ctx, arg=None):
         # Create a breakout channel
         breakout = get(ctx.guild.categories, id=category_breakout)
 
-        vc = await ctx.guild.create_voice_channel(f"{prefix}{i + 1}", category=breakout)
+        vc = await ctx.guild.create_voice_channel(f"{prefix}-{i + 1}", category=breakout)
         for m in ms:
             await m.move_to(vc)
 
@@ -1274,7 +1266,6 @@ async def icebreaker(ctx):
         "What are some things you’ve heard about your respective colleges?",
         "If you had a sixth college pet raccoon, what would you name them?",
         "What’s something everyone would look dumb doing?",
-        "What’s something you can say while coding and in the bedroom?",
         "Who was your childhood actor/actress crush?",
         "Which cartoon character do you relate to the most?",
         "What major would you choose if you did not have your current major?",
@@ -1331,23 +1322,14 @@ async def on_message(message):
             state["ea_count"] += 1
             await message.channel.send(f"each other! (count: {state['ea_count']})")
         elif message.channel.id == channel_need_help:
+            admin_roles = [
+                get(message.guild.roles, name="Mentor"),
+                get(message.guild.roles, name="Professor"),
+            ]
             if id_not_in_q(message.author.id):
-                await add_ticket(message.author, message.content)
+                await add_ticket(message.author, message.content, admin_roles)
 
     await bot.process_commands(message)
-
-
-@bot.command(name="helpme")
-async def onboarding_help(ctx):
-    if (
-        is_private(ctx.channel)
-        and id_not_in_q(ctx.message.author.id)
-        and (
-            ctx.author.id not in state["student_map"]
-            or students[state["student_map"][ctx.author.id]].preferred is None
-        )
-    ):
-        await add_ticket(ctx.message.author, "Needs help with onboarding")
 
 
 ##################
@@ -1367,7 +1349,7 @@ async def rm_user(ctx, uid):
     uid = int(uid)
     state["student_map"].pop(uid, None)
 
-    m = bot.get_guild(guild_id).get_member(uid)
+    m = ctx.guild.get_member(uid)
 
     await m.remove_roles(*(m.roles))
 
@@ -1378,7 +1360,7 @@ async def add_user(ctx, uid, email):
     uid = int(uid)
     state["student_map"][uid] = email
 
-    m = bot.get_guild(guild_id).get_member(uid)
+    m = ctx.guild.get_member(uid)
 
     await init_roles(m)
 
@@ -1432,7 +1414,7 @@ async def sync_roles(ctx):
 
     # We then re-add everything based on our internal state and consts
     for disc_id in state["student_map"].keys():
-        await init_roles(bot.get_guild(guild_id).get_member(disc_id))
+        await init_roles(ctx.guild.get_member(disc_id))
 
     print("sync complete")
 
