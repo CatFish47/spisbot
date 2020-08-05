@@ -79,6 +79,7 @@ channel_mentor_queue = 735688058585874433
 channel_need_help = 736802874075512853
 category_breakout = 738930321554407524
 category_lab = 732094742447390734
+category_mentors = 740357821870374912
 
 # students is a map from an email to the student info
 students = {
@@ -868,18 +869,6 @@ async def init_roles(member):
     )
     await member.add_roles(pair_role)
 
-    if m:
-        mentor_name = f"mentor--{m}"
-        mentor_role = get(member.guild.roles, name=mentor_name)
-        mentor_role = (
-            await member.guild.create_role(
-                name=mentor_name, colour=discord.Color.dark_purple()
-            )
-            if not mentor_role
-            else mentor_role
-        )
-        await member.add_roles(mentor_role)
-
     # We also need to create a pair channel:
     labs = get(member.guild.categories, id=category_lab)
 
@@ -893,6 +882,32 @@ async def init_roles(member):
             get(member.guild.roles, name="Mentor"), view_channel=True
         )
         await nc.set_permissions(pair_role, view_channel=True)
+
+    if m:
+        mentor_name = f"mentor--{m}"
+        mentor_role = get(member.guild.roles, name=mentor_name)
+        mentor_role = (
+            await member.guild.create_role(
+                name=mentor_name, colour=discord.Color.dark_purple()
+            )
+            if not mentor_role
+            else mentor_role
+        )
+        await member.add_roles(mentor_role)
+
+        # And a mentor channel:
+        mentors = get(member.guild.categories, id=category_mentors)
+
+        if not get(member.guild.voice_channels, name=mentor_name):
+            nc = await member.guild.create_voice_channel(mentor_name, category=mentors)
+            await nc.set_permissions(member.guild.default_role, view_channel=False)
+            await nc.set_permissions(
+                get(member.guild.roles, name="Professor"), view_channel=True
+            )
+            await nc.set_permissions(
+                get(member.guild.roles, name="Mentor"), view_channel=True
+            )
+            await nc.set_permissions(mentor_role, view_channel=True)
 
 
 ###########
@@ -1104,7 +1119,7 @@ def breakout_ident():
 
 def breakout_prefix(ident):
     if ident is None:
-        return "breakout--"
+        return "breakout-"
     else:
         return f"breakout--{ident}"
 
@@ -1118,10 +1133,26 @@ async def recall(ctx, ident=None):
         if member.voice is not None and member.voice.channel is not None:
             await member.move_to(ctx.author.voice.channel)
 
-    # If we have any breakout voice channels, we remove those too
+
+@commands.check(in_voice_channel)
+@bot.command(name="bkclose")
+@commands.has_role("Mentor")
+async def bkclose(ctx, ident=None):
+    # We move  to the voice channel of the person who invoked recall
+    for member in ctx.guild.members:
+        if member.voice is not None and member.voice.channel is not None:
+            await member.move_to(ctx.author.voice.channel)
+
+    # For each matching breakout channel:
     for vc in ctx.guild.voice_channels:
         prefix = breakout_prefix(ident)
         if vc.name.startswith(prefix):
+            # We first move all its members to the VC of the person who
+            # invoked recall.
+            for member in vc.members:
+                await member.move_to(ctx.author.voice.channel)
+
+            # We then delete this channel.
             await vc.delete()
 
 
@@ -1242,7 +1273,7 @@ async def start_poll(ctx, name=None, *args):
 
 @bot.command(name="help")
 async def help(ctx):
-    footer = "spisbot 2020-08-02 | https://github.com/dcao/spisbot"
+    footer = "spisbot 2020-08-04 | https://github.com/dcao/spisbot"
 
     desc = """
 spisbot is the custom-made robot designed to help manage the SPIS 2020 Discord server. While you can send me commands to make me do things, I'm also always sitting in the background to help welcome people to the SPIS server and manage queue tickets.
@@ -1387,6 +1418,30 @@ async def user_info(ctx, uid):
     embed = discord.Embed(title="User not found")
     await ctx.send(embed=embed)
 
+
+@bot.command(name="syncmentorchannels")
+@commands.has_role("Mentor")
+async def sync_mentor_channels(ctx):
+    for channel in ctx.guild.voice_channels:
+        if channel.name.startswith("mentor--"):
+            await channel.delete()
+
+    mentors = get(ctx.guild.categories, id=category_mentors)
+    for role in ctx.guild.roles:
+        if role.name.startswith("mentor--"):
+
+            if not get(ctx.guild.voice_channels, name=role):
+                nc = await ctx.guild.create_voice_channel(role.name, category=mentors)
+                await nc.set_permissions(ctx.guild.default_role, view_channel=False)
+                await nc.set_permissions(
+                    get(ctx.guild.roles, name="Professor"), view_channel=True
+                )
+                await nc.set_permissions(
+                    get(ctx.guild.roles, name="Mentor"), view_channel=True
+                )
+                await nc.set_permissions(role, view_channel=True)
+
+    print("sync complete")
 
 @bot.command(name="syncroles")
 @commands.has_role("Mentor")
