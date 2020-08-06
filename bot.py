@@ -13,6 +13,12 @@ from discord.ext import commands, tasks
 from discord.utils import get
 from dotenv import load_dotenv
 
+# for /wide
+import requests
+import io
+from PIL import Image
+from tempfile import NamedTemporaryFile
+
 load_dotenv()
 token = os.getenv("DISCORD_TOKEN")
 
@@ -667,10 +673,10 @@ bot.remove_command("help")
 
 @bot.event
 async def on_ready():
-    # activity = discord.Game(name="Netflix")
-    activity = discord.Activity(
-        type=discord.ActivityType.watching, name="your every move"
-    )
+    activity = discord.Game(name="Gary says")
+    # activity = discord.Activity(
+    #     type=discord.ActivityType.watching, name="your every move"
+    # )
     await bot.change_presence(activity=activity)
     print("Bot is ready!")
 
@@ -1138,14 +1144,9 @@ async def recall(ctx, ident=None):
 @bot.command(name="bkclose")
 @commands.has_role("Mentor")
 async def bkclose(ctx, ident=None):
-    # We move  to the voice channel of the person who invoked recall
-    for member in ctx.guild.members:
-        if member.voice is not None and member.voice.channel is not None:
-            await member.move_to(ctx.author.voice.channel)
-
     # For each matching breakout channel:
+    prefix = breakout_prefix(ident)
     for vc in ctx.guild.voice_channels:
-        prefix = breakout_prefix(ident)
         if vc.name.startswith(prefix):
             # We first move all its members to the VC of the person who
             # invoked recall.
@@ -1273,7 +1274,7 @@ async def start_poll(ctx, name=None, *args):
 
 @bot.command(name="help")
 async def help(ctx):
-    footer = "spisbot 2020-08-04 | https://github.com/dcao/spisbot"
+    footer = "spisbot 2020-08-05 | https://github.com/dcao/spisbot | \"David made SPISBot in his image\" - Niema"
 
     desc = """
 spisbot is the custom-made robot designed to help manage the SPIS 2020 Discord server. While you can send me commands to make me do things, I'm also always sitting in the background to help welcome people to the SPIS server and manage queue tickets.
@@ -1288,7 +1289,6 @@ spisbot is the custom-made robot designed to help manage the SPIS 2020 Discord s
     embed.set_footer(text=footer)
 
     await ctx.message.channel.send(embed=embed)
-
 
 # Get a random icebreaker question!
 @bot.command("icebreaker")
@@ -1361,6 +1361,18 @@ async def on_message(message):
                 await add_ticket(message.author, message.content, admin_roles)
 
     await bot.process_commands(message)
+
+
+@bot.command("wide")
+async def wide(ctx):
+    attachment_url = ctx.message.attachments[0].url
+    file_request = requests.get(attachment_url)
+    with Image.open(io.BytesIO(file_request.content)) as im:
+        imr = im.resize((im.size[0] * 5, im.size[1]))
+        with io.BytesIO() as buf:
+            imr.save(buf, format='JPEG')
+            buf.seek(0)
+            await ctx.send(file=discord.File(buf, "wide.jpg"))
 
 
 ##################

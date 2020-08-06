@@ -1,3 +1,5 @@
 recordclass
 python-dotenv
 discord.py[voice]
+Pillow
+requests
