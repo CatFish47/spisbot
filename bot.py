@@ -902,10 +902,10 @@ async def init_roles(member):
         await member.add_roles(mentor_role)
 
         # And a mentor channel:
-        mentors = get(member.guild.categories, id=category_mentors)
+        mentor_cat = get(member.guild.categories, id=category_mentors)
 
         if not get(member.guild.voice_channels, name=mentor_name):
-            nc = await member.guild.create_voice_channel(mentor_name, category=mentors)
+            nc = await member.guild.create_voice_channel(mentor_name, category=mentor_cat)
             await nc.set_permissions(member.guild.default_role, view_channel=False)
             await nc.set_permissions(
                 get(member.guild.roles, name="Professor"), view_channel=True
@@ -1274,7 +1274,7 @@ async def start_poll(ctx, name=None, *args):
 
 @bot.command(name="help")
 async def help(ctx):
-    footer = "spisbot 2020-08-05 | https://github.com/dcao/spisbot | \"David made SPISBot in his image\" - Niema"
+    footer = "spisbot 2020-08-05 | https://github.com/dcao/spisbot"
 
     desc = """
 spisbot is the custom-made robot designed to help manage the SPIS 2020 Discord server. While you can send me commands to make me do things, I'm also always sitting in the background to help welcome people to the SPIS server and manage queue tickets.
@@ -1283,6 +1283,17 @@ spisbot is the custom-made robot designed to help manage the SPIS 2020 Discord s
 
 - `/icebreaker`: returns a random icebreaker question. Good for getting to know your fellow mentees!
 - `/emojify <text>`: turns some text into emojis :)
+- `/wide`: when called as the comment on an image: widens the image :))
+    
+**Administrator commands**
+
+- `/onduty` - add the "On Duty" role to show that you're on duty.
+- `/offduty` - add the "Off Duty" role to show that you're off duty.
+
+If you're trying to call any other commands, keep this in mind:
+
+- You should probably ask before running a suspicious-looking command.
+- You probably **shouldn't** run a command that starts with `sync` or `purge`.
 
 """
     embed = discord.Embed(title="spisbot help", description=desc)
@@ -1370,9 +1381,9 @@ async def wide(ctx):
     with Image.open(io.BytesIO(file_request.content)) as im:
         imr = im.resize((im.size[0] * 5, im.size[1]))
         with io.BytesIO() as buf:
-            imr.save(buf, format='JPEG')
+            imr.save(buf, format='PNG')
             buf.seek(0)
-            await ctx.send(file=discord.File(buf, "wide.jpg"))
+            await ctx.send(file=discord.File(buf, "wide.png"))
 
 
 ##################
