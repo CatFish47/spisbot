@@ -1289,6 +1289,9 @@ spisbot is the custom-made robot designed to help manage the SPIS 2020 Discord s
 
 - `/onduty` - add the "On Duty" role to show that you're on duty.
 - `/offduty` - add the "Off Duty" role to show that you're off duty.
+- `/breakout <arg>` - if arg is `mentor`, split into mentor groups. otherwise, create `arg` different breakout rooms and split mentees and admins evenly in each.
+- `/bkclose [ident]` - close breakouts with identifier `ident` if specified; closes all breakouts otherwise
+- `/recall` - move all people in a VC to your current VC.
 
 If you're trying to call any other commands, keep this in mind:
 
