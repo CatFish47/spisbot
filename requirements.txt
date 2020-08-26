@@ -3,3 +3,4 @@ python-dotenv
 discord.py[voice]
 Pillow
 requests
+better-profanity
