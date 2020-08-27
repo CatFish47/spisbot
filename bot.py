@@ -248,7 +248,7 @@ students = {
     "bdittric@ucsd.edu": Mentee(
         "Benjamin",
         "Dittrich",
-        "Benjamin",
+        "Ben",
         "bdittric@ucsd.edu",
         ["h3tang@ucsd.edu"],
         "acw011@ucsd.edu",
@@ -259,7 +259,7 @@ students = {
         "Conti",
         "Sophia",
         "sconti@ucsd.edu",
-        ["nnazeem@ucsd.edu"],
+        ["nfrankli@ucsd.edu"],
         "l4gonzal@ucsd.edu",
         "curt",
     ),
@@ -268,7 +268,7 @@ students = {
         "Nazeem",
         "Nihal",
         "nnazeem@ucsd.edu",
-        ["sconti@ucsd.edu"],
+        ["axyu@ucsd.edu"],
         "l4gonzal@ucsd.edu",
         "curt",
     ),
@@ -295,7 +295,7 @@ students = {
         "Singh",
         "Amaan",
         "amsingh@ucsd.edu",
-        ["adjensen@ucsd.edu"],
+        [],
         "stn005@ucsd.edu",
         "gary",
     ),
@@ -304,7 +304,7 @@ students = {
         "Jensen",
         "Alexander",
         "adjensen@ucsd.edu",
-        ["amsingh@ucsd.edu"],
+        ["shperry@ucsd.edu"],
         "stn005@ucsd.edu",
         "gary",
     ),
@@ -331,16 +331,16 @@ students = {
         "Lu",
         "Faith",
         "falu@ucsd.edu",
-        ["n9patel@ucsd.edu"],
+        ["gyuan@ucsd.edu"],
         "unn002@ucsd.edu",
         "niema",
     ),
     "n9patel@ucsd.edu": Mentee(
         "Nikunjkumar",
         "Patel",
-        "Nikunj",
+        "Nik",
         "n9patel@ucsd.edu",
-        ["falu@ucsd.edu"],
+        ["tchui@ucsd.edu"],
         "unn002@ucsd.edu",
         "niema",
     ),
@@ -367,7 +367,7 @@ students = {
         "Banwait",
         "Armaan",
         "abanwait@ucsd.edu",
-        ["y4bao@ucsd.edu"],
+        ["d6le@ucsd.edu"],
         "ddesu@ucsd.edu",
         "gary",
     ),
@@ -376,7 +376,7 @@ students = {
         "Bao",
         "James",
         "y4bao@ucsd.edu",
-        ["abanwait@ucsd.edu"],
+        ["lwtaylor@ucsd.edu"],
         "ddesu@ucsd.edu",
         "gary",
     ),
@@ -385,7 +385,7 @@ students = {
         "Kamali",
         "Nima",
         "nkamalis@ucsd.edu",
-        ["nkarter@ucsd.edu"],
+        [],
         "ddesu@ucsd.edu",
         "gary",
     ),
@@ -394,7 +394,7 @@ students = {
         "Karter",
         "Nathan",
         "nkarter@ucsd.edu",
-        ["nkamalis@ucsd.edu"],
+        ["alal@ucsd.edu"],
         "ddesu@ucsd.edu",
         "gary",
     ),
@@ -403,7 +403,7 @@ students = {
         "Ashby",
         "Celina",
         "cashby@ucsd.edu",
-        ["shperry@ucsd.edu"],
+        [],
         "lsteiner@ucsd.edu",
         "curt",
     ),
@@ -412,7 +412,7 @@ students = {
         "Perry",
         "Sean",
         "shperry@ucsd.edu",
-        ["cashby@ucsd.edu"],
+        ["adjensen@ucsd.edu"],
         "lsteiner@ucsd.edu",
         "curt",
     ),
@@ -421,7 +421,7 @@ students = {
         "Wheeler",
         "Jackson",
         "j1wheele@ucsd.edu",
-        ["nfrankli@ucsd.edu"],
+        ["ssrinath@ucsd.edu"],
         "lsteiner@ucsd.edu",
         "curt",
     ),
@@ -430,7 +430,7 @@ students = {
         "Franklin",
         "Nathalie",
         "nfrankli@ucsd.edu",
-        ["j1wheele@ucsd.edu"],
+        ["sconti@ucsd.edu"],
         "lsteiner@ucsd.edu",
         "curt",
     ),
@@ -439,7 +439,7 @@ students = {
         "Le",
         "Don",
         "d6le@ucsd.edu",
-        ["lwtaylor@ucsd.edu"],
+        ["abanwait@ucsd.edu"],
         "tgarry@ucsd.edu",
         "curt",
     ),
@@ -448,25 +448,25 @@ students = {
         "Taylor",
         "Luke",
         "lwtaylor@ucsd.edu",
-        ["d6le@ucsd.edu"],
+        ["y4bao@ucsd.edu"],
         "tgarry@ucsd.edu",
         "curt",
     ),
     "ssrinath@ucsd.edu": Mentee(
         "Sidharth",
         "Srinath",
-        "Sidharth",
+        "Sid",
         "ssrinath@ucsd.edu",
-        ["tchui@ucsd.edu"],
+        ["j1wheele@ucsd.edu"],
         "tgarry@ucsd.edu",
         "curt",
     ),
     "tchui@ucsd.edu": Mentee(
         "Theodore",
         "Hui",
-        "Theodore",
+        "Theo",
         "tchui@ucsd.edu",
-        ["ssrinath@ucsd.edu"],
+        ["n9patel@ucsd.edu"],
         "tgarry@ucsd.edu",
         "curt",
     ),
@@ -475,7 +475,7 @@ students = {
         "Yuan",
         "Gavin",
         "gyuan@ucsd.edu",
-        ["saramesh@ucsd.edu"],
+        ["falu@ucsd.edu"],
         "clemarch@ucsd.edu",
         "niema",
     ),
@@ -484,7 +484,7 @@ students = {
         "Ramesh",
         "Shohan",
         "saramesh@ucsd.edu",
-        ["gyuan@ucsd.edu"],
+        [],
         "clemarch@ucsd.edu",
         "niema",
     ),
@@ -565,7 +565,7 @@ students = {
         "Lal",
         "Akshat",
         "alal@ucsd.edu",
-        ["axyu@ucsd.edu"],
+        ["nkarter@ucsd.edu"],
         "rpmclaug@ucsd.edu",
         "gary",
     ),
@@ -574,7 +574,7 @@ students = {
         "Yu",
         "Aaron",
         "axyu@ucsd.edu",
-        ["alal@ucsd.edu"],
+        ["nnazeem@ucsd.edu"],
         "rpmclaug@ucsd.edu",
         "gary",
     ),
@@ -693,8 +693,8 @@ def fmt_students():
     res = ""
     for s in students.values():
         res += "{}\t{}\t{}\t{}".format(
-            s.first,
-            "\t".join([x.first for x in s.partners(students)]),
+            s.preferred,
+            "\t".join([x.preferred for x in s.partners(students)]),
             s.mentor(mentors).first,
             s.instr,
         )
@@ -703,10 +703,30 @@ def fmt_students():
     return res
 
 
+def fmt_state():
+    res = ""
+    for uid, email in state["student_map"].items():
+        s = students[email]
+        res += "{}\t{}\t{}\t{}\t{}".format(
+            s.preferred,
+            uid,
+            "\t".join([x.preferred for x in s.partners(students)]),
+            s.mentor(mentors).first,
+            s.instr,
+        )
+        res += "\n"
+
+    return res
+
+@bot.command("verifyroster")
+@commands.has_role("Mentor")
+async def verify_roster(ctx):
+    await ctx.send("```\n" + fmt_students() + "```")
+
 @bot.command("verifystate")
 @commands.has_role("Mentor")
 async def verify_state(ctx):
-    await ctx.send("```\n" + fmt_students() + "```")
+    print("```\n" + fmt_state() + "```")
 
 
 ##############
