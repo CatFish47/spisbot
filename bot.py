@@ -1389,8 +1389,6 @@ async def on_message(message):
         if what_doing(message.content):
             state["ea_count"] += 1
             await message.channel.send(f"each other! (count: {state['ea_count']})")
-        elif profanity.contains_profanity(message.content):
-            await message.channel.send(f"watch yo profanity :((")
         elif message.channel.id == channel_need_help:
             admin_roles = [
                 get(message.guild.roles, name="Mentor"),
