@@ -1415,6 +1415,8 @@ async def wide(ctx):
 @bot.command("goodbye")
 async def goodbye(ctx):
     message = '''
+@everyone
+
 ```
 It's been a long day without you, my friend
 And I'll tell you all about it when I see you again
