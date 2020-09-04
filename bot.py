@@ -1410,6 +1410,20 @@ async def wide(ctx):
             imr.save(buf, format='PNG')
             buf.seek(0)
             await ctx.send(file=discord.File(buf, "wide.png"))
+            
+            
+@bot.command("goodbye")
+async def goodbye(ctx):
+    message = '''
+```
+It's been a long day without you, my friend
+And I'll tell you all about it when I see you again
+We've come a long way from where we began
+Oh, I'll tell you all about it when I see you again
+When I see you again...
+```
+'''
+    await ctx.send(message)
 
 
 ##################
