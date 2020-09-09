@@ -1305,6 +1305,7 @@ spisbot is the custom-made robot designed to help manage the SPIS 2020 Discord s
 **General commands**
 
 - `/icebreaker`: returns a random icebreaker question. Good for getting to know your fellow mentees!
+- `/unprofessional`: returns an unprofessional icebreaker question. Good if you're an unprofessional person!
 - `/emojify <text>`: turns some text into emojis :)
 - `/wide`: when called as the comment on an image: widens the image :))
     
@@ -1340,6 +1341,12 @@ async def icebreaker(ctx):
         "What’s the best tv series you have ever seen?",
         "The zombie apocalypse is coming, which 3 people are you taking to survive?",
     ]
+
+    await ctx.channel.send(random.choice(questions))
+    
+@bot.command("unprofessional")
+async def unprofessional(ctx):
+    questions = os.getenv("QUESTIONS").split(';')
 
     await ctx.channel.send(random.choice(questions))
 
