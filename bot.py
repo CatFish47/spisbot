@@ -1257,6 +1257,7 @@ async def timeout(ctx, member: discord.Member, secs):
     while time.time() < t_end:
         if member.voice is not None:
             await member.move_to(c)
+            await asyncio.sleep(1)
 
 
 #########
