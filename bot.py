@@ -1256,7 +1256,7 @@ async def timeout(ctx, member: discord.Member, secs):
     if member.voice is not None and member.voice.channel is not None:
         og = member.voice.channel
 
-        t_end = time.time() + secs
+        t_end = time.time() + float(secs)
         while time.time() < t_end:
             if member.voice is not None:
                 await member.move_to(c)
