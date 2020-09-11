@@ -19,6 +19,8 @@ import io
 from PIL import Image
 from tempfile import NamedTemporaryFile
 
+import time
+
 # watch yo profanity
 from better_profanity import profanity
 
@@ -1241,6 +1243,20 @@ async def breakout(ctx, arg=None):
         vc = await ctx.guild.create_voice_channel(f"{prefix}-{i + 1}", category=breakout)
         for m in ms:
             await m.move_to(vc)
+
+
+##################
+# TIMEOUT CORNER #
+##################
+@bot.command(name="timeout")
+async def timeout(ctx, member: discord.Member, secs):
+    timeout_channel = 741401483144069215
+    c = discord.utils.get(ctx.guild.voice_channels, id=timeout_channel)
+
+    t_end = time.time() + secs
+    while time.time() < t_end:
+        if member.voice is not None:
+            await member.move_to(c)
 
 
 #########
