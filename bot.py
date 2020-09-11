@@ -1253,11 +1253,16 @@ async def timeout(ctx, member: discord.Member, secs):
     timeout_channel = 741401483144069215
     c = discord.utils.get(ctx.guild.voice_channels, id=timeout_channel)
 
-    t_end = time.time() + secs
-    while time.time() < t_end:
-        if member.voice is not None:
-            await member.move_to(c)
-            await asyncio.sleep(1)
+    if member.voice is not None and member.voice.channel is not None:
+        og = member.voice.channel
+
+        t_end = time.time() + secs
+        while time.time() < t_end:
+            if member.voice is not None:
+                await member.move_to(c)
+                await asyncio.sleep(1)
+
+        await member.move_to(og)
 
 
 #########
