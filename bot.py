@@ -252,18 +252,18 @@ students = {
 		"Jose",
 		"Jared",
 		"jjose@ucsd.edu",
-		["jjose@ucsd.edu"],
-		"dam001@ucsd.edu",
-		"gary"
+		["cstam@ucsd.edu"],
+		"lmanzano@ucsd.edu",
+		"niema"
 	),
     "jsimpauco@ucsd.edu": Mentee(
 		"Jared",
 		"Simpauco",
 		"Jared",
 		"jsimpauco@ucsd.edu",
-		["cstam@ucsd.edu"],
-		"lmanzano@ucsd.edu",
-		"niema"
+		["a3ahmed@ucsd.edu"],
+		"dam001@ucsd.edu",
+		"gary"
 	),
     "jlk004@ucsd.edu": Mentee(
 		"Jeannie",
@@ -902,7 +902,7 @@ Have fun, and welcome to SPIS!
 async def init_roles(member):
     if member == None:
         return;
-        
+
     # Get the student
     s = students[state["student_map"][member.id]]
 
@@ -1482,7 +1482,7 @@ async def rm_user(ctx, uid):
     uid = int(uid)
     state["student_map"].pop(uid, None)
 
-    m = ctx.guild.get_member(uid)
+    m = await ctx.guild.fetch_member(uid)
 
     await m.remove_roles(*(m.roles))
 
@@ -1493,7 +1493,7 @@ async def add_user(ctx, uid, email):
     uid = int(uid)
     state["student_map"][uid] = email
 
-    m = ctx.guild.get_member(uid)
+    m = await ctx.guild.fetch_member(uid)
 
     await init_roles(m)
 
@@ -1571,7 +1571,9 @@ async def sync_roles(ctx):
 
     # We then re-add everything based on our internal state and consts
     for disc_id in state["student_map"].keys():
-        await init_roles(ctx.guild.get_member(disc_id))
+        print(disc_id)
+        print(await ctx.guild.fetch_member(disc_id))
+        await init_roles(await ctx.guild.fetch_member(disc_id))
 
     print("sync complete")
 
