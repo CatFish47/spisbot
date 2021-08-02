@@ -189,7 +189,7 @@ students = {
 		"Stam",
 		"Caleb",
 		"cstam@ucsd.edu",
-		["jsimpauco@ucsd.edu"],
+		["jjose@ucsd.edu"],
 		"lmanzano@ucsd.edu",
 		"niema"
 	),
@@ -252,7 +252,7 @@ students = {
 		"Jose",
 		"Jared",
 		"jjose@ucsd.edu",
-		["a3ahmed@ucsd.edu"],
+		["jjose@ucsd.edu"],
 		"dam001@ucsd.edu",
 		"gary"
 	),
