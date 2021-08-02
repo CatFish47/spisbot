@@ -900,6 +900,9 @@ Have fun, and welcome to SPIS!
 
 
 async def init_roles(member):
+    if member == None:
+        return;
+        
     # Get the student
     s = students[state["student_map"][member.id]]
 
