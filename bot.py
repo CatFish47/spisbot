@@ -12,6 +12,7 @@ import discord
 from discord.ext import commands, tasks
 from discord.utils import get
 from dotenv import load_dotenv
+from discord import ActionRow, Button, ButtonColor
 
 # for /wide
 import requests
@@ -26,7 +27,6 @@ from better_profanity import profanity
 
 load_dotenv()
 token = os.getenv("DISCORD_TOKEN")
-
 
 #############
 # DATATYPES #
@@ -85,523 +85,531 @@ class Mentor:
 # CONSTS #
 ##########
 
-channel_announcements = 732480582822395945
-channel_mentor_queue = 735688058585874433
-channel_need_help = 736802874075512853
-category_breakout = 738930321554407524
-category_lab = 732094742447390734
-category_mentors = 740357821870374912
+channel_announcements = 864372838844727326
+channel_mentor_queue = 869402812189118515
+channel_need_help = 869402827271856198
+category_breakout = 869403135070838845
+category_lab = 868539125081444423
+category_mentors = 869460015692521512
 
 # students is a map from an email to the student info
 students = {
-    "vsastry@ucsd.edu": Mentee(
-        "Vibha",
-        "Sastry",
-        "Vibha",
-        "vsastry@ucsd.edu",
-        ["dam001@ucsd.edu"],
-        "abruevic@ucsd.edu",
-        "niema",
-    ),
-    "dam001@ucsd.edu": Mentee(
-        "Diego",
-        "Martinez",
-        "Diego",
-        "dam001@ucsd.edu",
-        ["vsastry@ucsd.edu"],
-        "abruevic@ucsd.edu",
-        "niema",
-    ),
-    "kgromero@ucsd.edu": Mentee(
-        "Katherine",
-        "Romero",
-        "Kate",
-        "kgromero@ucsd.edu",
-        ["aolsen@ucsd.edu"],
-        "abruevic@ucsd.edu",
-        "niema",
-    ),
-    "aolsen@ucsd.edu": Mentee(
-        "Alexander",
-        "Olsen",
-        "Alex",
-        "aolsen@ucsd.edu",
-        ["kgromero@ucsd.edu"],
-        "abruevic@ucsd.edu",
-        "niema",
-    ),
-    "jrusso@ucsd.edu": Mentee(
-        "John-David",
-        "Russo",
-        "JD",
-        "jrusso@ucsd.edu",
-        ["hluu@ucsd.edu"],
-        "dmcao@ucsd.edu",
-        "niema",
-    ),
-    "hluu@ucsd.edu": Mentee(
-        "Henry",
-        "Luu",
-        "Henry",
-        "hluu@ucsd.edu",
-        ["jrusso@ucsd.edu"],
-        "dmcao@ucsd.edu",
-        "niema",
-    ),
-    "asierra@ucsd.edu": Mentee(
-        "Alyssa",
-        "Sierra",
-        "Alyssa",
-        "asierra@ucsd.edu",
-        ["lmchen@ucsd.edu"],
-        "ejewik@ucsd.edu",
-        "curt",
-    ),
-    "lmchen@ucsd.edu": Mentee(
-        "Lauren",
-        "Chen",
-        "Lauren",
-        "lmchen@ucsd.edu",
-        ["asierra@ucsd.edu"],
-        "ejewik@ucsd.edu",
-        "curt",
-    ),
-    "bchester@ucsd.edu": Mentee(
-        "Bradley",
-        "Chester",
-        "Bradley",
-        "bchester@ucsd.edu",
-        ["areljic@ucsd.edu"],
-        "ejewik@ucsd.edu",
-        "curt",
-    ),
-    "areljic@ucsd.edu": Mentee(
-        "Andrija",
-        "Reljic",
-        "Andrija",
-        "areljic@ucsd.edu",
-        ["bchester@ucsd.edu"],
-        "ejewik@ucsd.edu",
-        "curt",
-    ),
-    "jjdrisco@ucsd.edu": Mentee(
-        "John",
-        "Driscoll",
-        "John",
-        "jjdrisco@ucsd.edu",
-        ["ygupta@ucsd.edu"],
-        "akatwal@ucsd.edu",
-        "gary",
-    ),
-    "ygupta@ucsd.edu": Mentee(
-        "Yukati",
-        "Gupta",
-        "Yukati",
-        "ygupta@ucsd.edu",
-        ["jjdrisco@ucsd.edu"],
-        "akatwal@ucsd.edu",
-        "gary",
-    ),
-    "jftruong@ucsd.edu": Mentee(
-        "Jenelle",
-        "Truong",
-        "Jenelle",
-        "jftruong@ucsd.edu",
-        ["yahmad@ucsd.edu"],
-        "akatwal@ucsd.edu",
-        "gary",
-    ),
-    "yahmad@ucsd.edu": Mentee(
-        "Younus",
-        "Ahmad",
-        "Younus",
-        "yahmad@ucsd.edu",
-        ["jftruong@ucsd.edu"],
-        "akatwal@ucsd.edu",
-        "gary",
-    ),
-    "mfrankne@ucsd.edu": Mentee(
-        "Misa",
-        "Franknedy",
-        "Misa",
-        "mfrankne@ucsd.edu",
-        ["spapanas@ucsd.edu"],
-        "acw011@ucsd.edu",
-        "gary",
-    ),
-    "spapanas@ucsd.edu": Mentee(
-        "Sruthi",
-        "Papanasa",
-        "Sruthi",
-        "spapanas@ucsd.edu",
-        ["mfrankne@ucsd.edu"],
-        "acw011@ucsd.edu",
-        "gary",
-    ),
-    "h3tang@ucsd.edu": Mentee(
-        "Harry",
-        "Tang",
-        "Harry",
-        "h3tang@ucsd.edu",
-        ["bdittric@ucsd.edu"],
-        "acw011@ucsd.edu",
-        "gary",
-    ),
-    "bdittric@ucsd.edu": Mentee(
-        "Benjamin",
-        "Dittrich",
-        "Ben",
-        "bdittric@ucsd.edu",
-        ["h3tang@ucsd.edu"],
-        "acw011@ucsd.edu",
-        "gary",
-    ),
-    "sconti@ucsd.edu": Mentee(
-        "Sophia",
-        "Conti",
-        "Sophia",
-        "sconti@ucsd.edu",
-        ["nfrankli@ucsd.edu"],
-        "l4gonzal@ucsd.edu",
-        "curt",
-    ),
-    "nnazeem@ucsd.edu": Mentee(
-        "Nihal",
-        "Nazeem",
-        "Nihal",
-        "nnazeem@ucsd.edu",
-        ["axyu@ucsd.edu"],
-        "l4gonzal@ucsd.edu",
-        "curt",
-    ),
-    "lmanzano@ucsd.edu": Mentee(
-        "Lindsey",
-        "Manzano",
-        "Lindsey",
-        "lmanzano@ucsd.edu",
-        ["jyliu@ucsd.edu"],
-        "l4gonzal@ucsd.edu",
-        "curt",
-    ),
-    "jyliu@ucsd.edu": Mentee(
-        "Jeffrey",
-        "Liu",
-        "Jeffrey",
-        "jyliu@ucsd.edu",
-        ["lmanzano@ucsd.edu"],
-        "l4gonzal@ucsd.edu",
-        "curt",
-    ),
-    "amsingh@ucsd.edu": Mentee(
-        "Amaan",
-        "Singh",
-        "Amaan",
-        "amsingh@ucsd.edu",
-        [],
-        "stn005@ucsd.edu",
-        "gary",
-    ),
-    "adjensen@ucsd.edu": Mentee(
-        "Alexander",
-        "Jensen",
-        "Alexander",
-        "adjensen@ucsd.edu",
-        ["shperry@ucsd.edu"],
-        "stn005@ucsd.edu",
-        "gary",
-    ),
-    "ramartin@ucsd.edu": Mentee(
-        "Raul",
-        "Martinez Beltran",
-        "Raul",
-        "ramartin@ucsd.edu",
-        ["v3patel@ucsd.edu"],
-        "stn005@ucsd.edu",
-        "gary",
-    ),
-    "v3patel@ucsd.edu": Mentee(
-        "Vedant",
-        "Patel",
-        "Vedant",
-        "v3patel@ucsd.edu",
-        ["ramartin@ucsd.edu"],
-        "stn005@ucsd.edu",
-        "gary",
-    ),
-    "falu@ucsd.edu": Mentee(
-        "Faith",
-        "Lu",
-        "Faith",
-        "falu@ucsd.edu",
-        ["gyuan@ucsd.edu"],
-        "unn002@ucsd.edu",
-        "niema",
-    ),
-    "n9patel@ucsd.edu": Mentee(
-        "Nikunjkumar",
-        "Patel",
-        "Nik",
-        "n9patel@ucsd.edu",
-        ["tchui@ucsd.edu"],
-        "unn002@ucsd.edu",
-        "niema",
-    ),
-    "cwl001@ucsd.edu": Mentee(
-        "Cody",
-        "Lee",
-        "Cody",
-        "cwl001@ucsd.edu",
-        ["pchai@ucsd.edu"],
-        "unn002@ucsd.edu",
-        "niema",
-    ),
-    "pchai@ucsd.edu": Mentee(
-        "Pei-Ting",
-        "Chai",
-        "Alexis",
-        "pchai@ucsd.edu",
-        ["cwl001@ucsd.edu"],
-        "unn002@ucsd.edu",
-        "niema",
-    ),
-    "abanwait@ucsd.edu": Mentee(
-        "Armaan",
-        "Banwait",
-        "Armaan",
-        "abanwait@ucsd.edu",
-        ["d6le@ucsd.edu"],
-        "ddesu@ucsd.edu",
-        "gary",
-    ),
-    "y4bao@ucsd.edu": Mentee(
-        "James",
-        "Bao",
-        "James",
-        "y4bao@ucsd.edu",
-        ["lwtaylor@ucsd.edu"],
-        "ddesu@ucsd.edu",
-        "gary",
-    ),
-    "nkamalis@ucsd.edu": Mentee(
-        "Nima",
-        "Kamali",
-        "Nima",
-        "nkamalis@ucsd.edu",
-        [],
-        "ddesu@ucsd.edu",
-        "gary",
-    ),
-    "nkarter@ucsd.edu": Mentee(
-        "Nathaniel",
-        "Karter",
-        "Nathan",
-        "nkarter@ucsd.edu",
-        ["alal@ucsd.edu"],
-        "ddesu@ucsd.edu",
-        "gary",
-    ),
-    "cashby@ucsd.edu": Mentee(
-        "Celina",
-        "Ashby",
-        "Celina",
-        "cashby@ucsd.edu",
-        [],
-        "lsteiner@ucsd.edu",
-        "curt",
-    ),
-    "shperry@ucsd.edu": Mentee(
-        "Sean",
-        "Perry",
-        "Sean",
-        "shperry@ucsd.edu",
-        ["adjensen@ucsd.edu"],
-        "lsteiner@ucsd.edu",
-        "curt",
-    ),
-    "j1wheele@ucsd.edu": Mentee(
-        "Jackson",
-        "Wheeler",
-        "Jackson",
-        "j1wheele@ucsd.edu",
-        ["ssrinath@ucsd.edu"],
-        "lsteiner@ucsd.edu",
-        "curt",
-    ),
-    "nfrankli@ucsd.edu": Mentee(
-        "Nathalie",
-        "Franklin",
-        "Nathalie",
-        "nfrankli@ucsd.edu",
-        ["sconti@ucsd.edu"],
-        "lsteiner@ucsd.edu",
-        "curt",
-    ),
-    "d6le@ucsd.edu": Mentee(
-        "Don",
-        "Le",
-        "Don",
-        "d6le@ucsd.edu",
-        ["abanwait@ucsd.edu"],
-        "tgarry@ucsd.edu",
-        "curt",
-    ),
-    "lwtaylor@ucsd.edu": Mentee(
-        "Luke",
-        "Taylor",
-        "Luke",
-        "lwtaylor@ucsd.edu",
-        ["y4bao@ucsd.edu"],
-        "tgarry@ucsd.edu",
-        "curt",
-    ),
-    "ssrinath@ucsd.edu": Mentee(
-        "Sidharth",
-        "Srinath",
-        "Sid",
-        "ssrinath@ucsd.edu",
-        ["j1wheele@ucsd.edu"],
-        "tgarry@ucsd.edu",
-        "curt",
-    ),
-    "tchui@ucsd.edu": Mentee(
-        "Theodore",
-        "Hui",
-        "Theo",
-        "tchui@ucsd.edu",
-        ["n9patel@ucsd.edu"],
-        "tgarry@ucsd.edu",
-        "curt",
-    ),
-    "gyuan@ucsd.edu": Mentee(
-        "Gavin",
-        "Yuan",
-        "Gavin",
-        "gyuan@ucsd.edu",
-        ["falu@ucsd.edu"],
-        "clemarch@ucsd.edu",
-        "niema",
-    ),
-    "saramesh@ucsd.edu": Mentee(
-        "Shohan Aadithya",
-        "Ramesh",
-        "Shohan",
-        "saramesh@ucsd.edu",
-        [],
-        "clemarch@ucsd.edu",
-        "niema",
-    ),
-    "b1ho@ucsd.edu": Mentee(
-        "Brandon",
-        "Ho",
-        "Brandon",
-        "b1ho@ucsd.edu",
-        ["tmt003@ucsd.edu"],
-        "clemarch@ucsd.edu",
-        "niema",
-    ),
-    "tmt003@ucsd.edu": Mentee(
-        "Tuan",
-        "Tran",
-        "Tony",
-        "tmt003@ucsd.edu",
-        ["b1ho@ucsd.edu"],
-        "clemarch@ucsd.edu",
-        "niema",
-    ),
-    "sttan@ucsd.edu": Mentee(
-        "Stephen",
-        "Tan",
-        "Stephen",
-        "sttan@ucsd.edu",
-        ["psankesh@ucsd.edu"],
-        "ettan@ucsd.edu",
-        "niema",
-    ),
-    "psankesh@ucsd.edu": Mentee(
-        "Pratheek",
-        "Sankeshi",
-        "Pratheek",
-        "psankesh@ucsd.edu",
-        ["sttan@ucsd.edu"],
-        "ettan@ucsd.edu",
-        "niema",
-    ),
-    "kit002@ucsd.edu": Mentee(
-        "Kira",
-        "Tran",
-        "Kira",
-        "kit002@ucsd.edu",
-        ["hgrehm@ucsd.edu"],
-        "ettan@ucsd.edu",
-        "niema",
-    ),
-    "hgrehm@ucsd.edu": Mentee(
-        "Hannah",
-        "Grehm",
-        "Hannah",
-        "hgrehm@ucsd.edu",
-        ["kit002@ucsd.edu"],
-        "ettan@ucsd.edu",
-        "niema",
-    ),
-    "hxiao@ucsd.edu": Mentee(
-        "Henry",
-        "Xiao",
-        "Henry",
-        "hxiao@ucsd.edu",
-        ["tsalud@ucsd.edu"],
-        "rpmclaug@ucsd.edu",
-        "gary",
-    ),
-    "tsalud@ucsd.edu": Mentee(
-        "Travis",
-        "Salud",
-        "Travis",
-        "tsalud@ucsd.edu",
-        ["hxiao@ucsd.edu"],
-        "rpmclaug@ucsd.edu",
-        "gary",
-    ),
-    "alal@ucsd.edu": Mentee(
-        "Akshat",
-        "Lal",
-        "Akshat",
-        "alal@ucsd.edu",
-        ["nkarter@ucsd.edu"],
-        "rpmclaug@ucsd.edu",
-        "gary",
-    ),
-    "axyu@ucsd.edu": Mentee(
-        "Aaron",
-        "Yu",
-        "Aaron",
-        "axyu@ucsd.edu",
-        ["nnazeem@ucsd.edu"],
-        "rpmclaug@ucsd.edu",
-        "gary",
-    ),
+    "agudi@ucsd.edu": Mentee(
+		"Adi",
+		"Gudi",
+		"Adi",
+		"agudi@ucsd.edu",
+		["adhami@ucsd.edu"],
+		"hxiao@ucsd.edu",
+		"niema"
+	),
+    "adm008@ucsd.edu": Mentee(
+		"Adrian",
+		"Mendoza",
+		"Adrian",
+		"adm008@ucsd.edu",
+		["sprestrelski@ucsd.edu"],
+		"hgrehm@ucsd.edu",
+		"curt"
+	),
+    "cachiu@ucsd.edu": Mentee(
+		"Aerin",
+		"Chiu",
+		"Aerin",
+		"cachiu@ucsd.edu",
+		["juh016@ucsd.edu"],
+		"ygupta@ucsd.edu",
+		"gary"
+	),
+    "a3ahmed@ucsd.edu": Mentee(
+		"Aisha",
+		"Ahmed",
+		"Aisha",
+		"a3ahmed@ucsd.edu",
+		["jsimpauco@ucsd.edu"],
+		"dam001@ucsd.edu",
+		"gary"
+	),
+    "ajwong@ucsd.edu": Mentee(
+		"Alex",
+		"Wong",
+		"Alex",
+		"ajwong@ucsd.edu",
+		["tkn003@ucsd.edu"],
+		"ygupta@ucsd.edu",
+		"gary"
+	),
+    "arh003@ucsd.edu": Mentee(
+		"Alex",
+		"Hernandez",
+		"Alex",
+		"arh003@ucsd.edu",
+		["lkuruvila@ucsd.edu"],
+		"lmanzano@ucsd.edu",
+		"niema"
+	),
+    "adhami@ucsd.edu": Mentee(
+		"Amir",
+		"Dhami",
+		"Amir",
+		"adhami@ucsd.edu",
+		["agudi@ucsd.edu"],
+		"hxiao@ucsd.edu",
+		"niema"
+	),
+    "apurohit@ucsd.edu": Mentee(
+		"Anushka",
+		"Purohit",
+		"Anushka",
+		"apurohit@ucsd.edu",
+		["ovashishtha@ucsd.edu"],
+		"nrejai@ucsd.edu",
+		"gary"
+	),
+    "arkhanna@ucsd.edu": Mentee(
+		"Arnav",
+		"Khanna",
+		"Arnav",
+		"arkhanna@ucsd.edu",
+		["gxcheng@ucsd.edu"],
+		"hxiao@ucsd.edu",
+		"niema"
+	),
+    "bkreponte@ucsd.edu": Mentee(
+		"Brandon",
+		"Reponte",
+		"Brandon",
+		"bkreponte@ucsd.edu",
+		["jagranda@ucsd.edu"],
+		"miivanov@ucsd.edu",
+		"curt"
+	),
+    "cstam@ucsd.edu": Mentee(
+		"Caleb",
+		"Stam",
+		"Caleb",
+		"cstam@ucsd.edu",
+		["jsimpauco@ucsd.edu"],
+		"lmanzano@ucsd.edu",
+		"niema"
+	),
+    "ehcho@ucsd.edu": Mentee(
+		"Esther",
+		"Cho",
+		"Esther",
+		"ehcho@ucsd.edu",
+		[],
+		"e3brooks@ucsd.edu",
+		"gary"
+	),
+    "e8huang@ucsd.edu": Mentee(
+		"Ethan",
+		"Huang",
+		"Ethan",
+		"e8huang@ucsd.edu",
+		["jctseng@ucsd.edu"],
+		"dam001@ucsd.edu",
+		"gary"
+	),
+    "etl003@ucsd.edu": Mentee(
+		"Ethan",
+		"Lin",
+		"Ethan",
+		"etl003@ucsd.edu",
+		["sep005@ucsd.edu"],
+		"yahmad@ucsd.edu",
+		"niema"
+	),
+    "frgarcia@ucsd.edu": Mentee(
+		"Francisco",
+		"Garcia",
+		"Francisco",
+		"frgarcia@ucsd.edu",
+		["g4smith@ucsd.edu"],
+		"jktran@ucsd.edu",
+		"curt"
+	),
+    "g4smith@ucsd.edu": Mentee(
+		"Ginger",
+		"Smith",
+		"Ginger",
+		"g4smith@ucsd.edu",
+		["frgarcia@ucsd.edu"],
+		"jktran@ucsd.edu",
+		"curt"
+	),
+    "gxcheng@ucsd.edu": Mentee(
+		"Grant",
+		"Cheng",
+		"Grant",
+		"gxcheng@ucsd.edu",
+		["arkhanna@ucsd.edu"],
+		"hxiao@ucsd.edu",
+		"niema"
+	),
+    "jjose@ucsd.edu": Mentee(
+		"Jared",
+		"Jose",
+		"Jared",
+		"jjose@ucsd.edu",
+		["a3ahmed@ucsd.edu"],
+		"dam001@ucsd.edu",
+		"gary"
+	),
+    "jsimpauco@ucsd.edu": Mentee(
+		"Jared",
+		"Simpauco",
+		"Jared",
+		"jsimpauco@ucsd.edu",
+		["cstam@ucsd.edu"],
+		"lmanzano@ucsd.edu",
+		"niema"
+	),
+    "jlk004@ucsd.edu": Mentee(
+		"Jeannie",
+		"Kim",
+		"Jeannie",
+		"jlk004@ucsd.edu",
+		["kalbao@ucsd.edu"],
+		"jftruong@ucsd.edu",
+		"niema"
+	),
+    "jcanicosa@ucsd.edu": Mentee(
+		"Jenna",
+		"Canicosa",
+		"Jenna",
+		"jcanicosa@ucsd.edu",
+		["lmei@ucsd.edu"],
+		"nrejai@ucsd.edu",
+		"gary"
+	),
+    "jctseng@ucsd.edu": Mentee(
+		"Jenny",
+		"Tseng",
+		"Jenny",
+		"jctseng@ucsd.edu",
+		["etl003@ucsd.edu"],
+		"dam001@ucsd.edu",
+		"gary"
+	),
+    "jtn018@ucsd.edu": Mentee(
+		"Jeremy",
+		"Nguyen",
+		"Jeremy",
+		"jtn018@ucsd.edu",
+		["rsunku@ucsd.edu"],
+		"alal@ucsd.edu",
+		"gary"
+	),
+    "jroe@ucsd.edu": Mentee(
+		"Jodi",
+		"Roe",
+		"Jodi",
+		"jroe@ucsd.edu",
+		["nkn004@ucsd.edu"],
+		"jjdrisco@ucsd.edu",
+		"niema"
+	),
+    "juh016@ucsd.edu": Mentee(
+		"Jun",
+		"Hwang",
+		"Jun",
+		"juh016@ucsd.edu",
+		["cachiu@ucsd.edu"],
+		"ygupta@ucsd.edu",
+		"gary"
+	),
+    "jagranda@ucsd.edu": Mentee(
+		"Justyce",
+		"Granda",
+		"Justyce",
+		"jagranda@ucsd.edu",
+		["bkreponte@ucsd.edu"],
+		"miivanov@ucsd.edu",
+		"curt"
+	),
+    "kalbao@ucsd.edu": Mentee(
+		"Keean",
+		"Albao",
+		"Keean",
+		"kalbao@ucsd.edu",
+		["jlk004@ucsd.edu"],
+		"jftruong@ucsd.edu",
+		"niema"
+	),
+    "lmei@ucsd.edu": Mentee(
+		"Larry",
+		"Mei",
+		"Larry",
+		"lmei@ucsd.edu",
+		["jcanicosa@ucsd.edu"],
+		"nrejai@ucsd.edu",
+		"gary"
+	),
+    "lkuruvila@ucsd.edu": Mentee(
+		"Leah",
+		"Kuruvila",
+		"Leah",
+		"lkuruvila@ucsd.edu",
+		["arh003@ucsd.edu"],
+		"lmanzano@ucsd.edu",
+		"niema"
+	),
+    "sep005@ucsd.edu": Mentee(
+		"Lydia",
+		"Park",
+		"Lydia",
+		"sep005@ucsd.edu",
+		["etl003@ucsd.edu"],
+		"yahmad@ucsd.edu",
+		"niema"
+	),
+    "marquerupa@ucsd.edu": Mentee(
+		"Marlyn",
+		"Arque Rupa",
+		"Marlyn",
+		"marquerupa@ucsd.edu",
+		["vvenkatesh@ucsd.edu"],
+		"jftruong@ucsd.edu",
+		"niema"
+	),
+    "mwada@ucsd.edu": Mentee(
+		"Michinori",
+		"Wada",
+		"Michinori",
+		"mwada@ucsd.edu",
+		["ndanan@ucsd.edu"],
+		"alal@ucsd.edu",
+		"gary"
+	),
+    "nkn004@ucsd.edu": Mentee(
+		"Nam",
+		"Nguyen",
+		"Nam",
+		"nkn004@ucsd.edu",
+		["jroe@ucsd.edu"],
+		"jjdrisco@ucsd.edu",
+		"niema"
+	),
+    "nlchung@ucsd.edu": Mentee(
+		"Newton",
+		"Chung",
+		"Newton",
+		"nlchung@ucsd.edu",
+		["pgrimaldo@ucsd.edu"],
+		"yahmad@ucsd.edu",
+		"niema"
+	),
+    "ndanan@ucsd.edu": Mentee(
+		"Noah",
+		"Danan",
+		"Noah",
+		"ndanan@ucsd.edu",
+		["mwada@ucsd.edu"],
+		"alal@ucsd.edu",
+		"gary"
+	),
+    "nseyoum@ucsd.edu": Mentee(
+		"Nola",
+		"Seyoum",
+		"Nola",
+		"nseyoum@ucsd.edu",
+		["tlmeyers@ucsd.edu"],
+		"miivanov@ucsd.edu",
+		"curt"
+	),
+    "ovashishtha@ucsd.edu": Mentee(
+		"Ojas",
+		"Vashishtha",
+		"Ojas",
+		"ovashishtha@ucsd.edu",
+		["apurohit@ucsd.edu"],
+		"nrejai@ucsd.edu",
+		"gary"
+	),
+    "omedinajr@ucsd.edu": Mentee(
+		"Oswaldo",
+		"Medina Jr",
+		"Oswaldo",
+		"omedinajr@ucsd.edu",
+		["rkafle@ucsd.edu"],
+		"hgrehm@ucsd.edu",
+		"curt"
+	),
+    "pgrimaldo@ucsd.edu": Mentee(
+		"Pedro",
+		"Grimaldo Jr",
+		"Pedro",
+		"pgrimaldo@ucsd.edu",
+		["nlchung@ucsd.edu"],
+		"yahmad@ucsd.edu",
+		"niema"
+	),
+    "pndang@ucsd.edu": Mentee(
+		"Phu",
+		"Dang",
+		"Phu",
+		"pndang@ucsd.edu",
+		["unaik@ucsd.edu"],
+		"jjdrisco@ucsd.edu",
+		"niema"
+	),
+    "rsunku@ucsd.edu": Mentee(
+		"Raj",
+		"Sunku",
+		"Raj",
+		"rsunku@ucsd.edu",
+		["jtn018@ucsd.edu"],
+		"alal@ucsd.edu",
+		"gary"
+	),
+    "r3hu@ucsd.edu": Mentee(
+		"Rena",
+		"Hu",
+		"Rena",
+		"r3hu@ucsd.edu",
+		["zludena@ucsd.edu"],
+		"e3brooks@ucsd.edu",
+		"gary"
+	),
+    "rkafle@ucsd.edu": Mentee(
+		"Richa",
+		"Kafle",
+		"Richa",
+		"rkafle@ucsd.edu",
+		["omedinajr@ucsd.edu"],
+		"hgrehm@ucsd.edu",
+		"curt"
+	),
+    "ryhung@ucsd.edu": Mentee(
+		"Ryan",
+		"Hung",
+		"Ryan",
+		"ryhung@ucsd.edu",
+		["spkeane@ucsd.edu"],
+		"jdcross@ucsd.edu",
+		"curt"
+	),
+    "salucio@ucsd.edu": Mentee(
+		"Samantha",
+		"Lucio",
+		"Samantha",
+		"salucio@ucsd.edu",
+		["adm008@ucsd.edu"],
+		"hgrehm@ucsd.edu",
+		"curt"
+	),
+    "sprestrelski@ucsd.edu": Mentee(
+		"Samantha",
+		"Prestrelski",
+		"Samantha",
+		"sprestrelski@ucsd.edu",
+		["v2bui@ucsd.edu"],
+		"jktran@ucsd.edu",
+		"curt"
+	),
+    "sil045@ucsd.edu": Mentee(
+		"Sizhe",
+		"Li",
+		"Sizhe",
+		"sil045@ucsd.edu",
+		["twchu@ucsd.edu"],
+		"jdcross@ucsd.edu",
+		"curt"
+	),
+    "spkeane@ucsd.edu": Mentee(
+		"Stefan",
+		"Keane",
+		"Stefan",
+		"spkeane@ucsd.edu",
+		["ryhung@ucsd.edu"],
+		"jdcross@ucsd.edu",
+		"curt"
+	),
+    "tkn003@ucsd.edu": Mentee(
+		"Thoa",
+		"Nguyen",
+		"Thoa",
+		"tkn003@ucsd.edu",
+		["arh003@ucsd.edu"],
+		"ygupta@ucsd.edu",
+		"gary"
+	),
+    "twchu@ucsd.edu": Mentee(
+		"Timothy",
+		"Chu",
+		"Timothy",
+		"twchu@ucsd.edu",
+		["sil045@ucsd.edu"],
+		"jdcross@ucsd.edu",
+		"curt"
+	),
+    "tlmeyers@ucsd.edu": Mentee(
+		"Tyler",
+		"Meyers",
+		"Tyler",
+		"tlmeyers@ucsd.edu",
+		["nseyoum@ucsd.edu"],
+		"miivanov@ucsd.edu",
+		"curt"
+	),
+    "unaik@ucsd.edu": Mentee(
+		"Uma",
+		"Naik",
+		"Uma",
+		"unaik@ucsd.edu",
+		["pndang@ucsd.edu"],
+		"jjdrisco@ucsd.edu",
+		"niema"
+	),
+    "vvenkatesh@ucsd.edu": Mentee(
+		"Vikram",
+		"Venkatesh",
+		"Vikram",
+		"vvenkatesh@ucsd.edu",
+		["marquerupa@ucsd.edu"],
+		"jftruong@ucsd.edu",
+		"niema"
+	),
+    "v2bui@ucsd.edu": Mentee(
+		"Vuong",
+		"Bui",
+		"Vuong",
+		"v2bui@ucsd.edu",
+		["sprestrelski@ucsd.edu"],
+		"jktran@ucsd.edu",
+		"curt"
+	),
+    "zludena@ucsd.edu": Mentee(
+		"Zoe",
+		"Ludena",
+		"Zoe",
+		"zludena@ucsd.edu",
+		["r3hu@ucsd.edu"],
+		"e3brooks@ucsd.edu",
+		"gary"
+	),
 }
 
 # mentors is the map from mentors' email to their info.
 mentors = {
-    "unn002@ucsd.edu": Mentor("Nhi", "Nguyen", "Nhi", "unn002@ucsd.edu"),
-    "clemarch@ucsd.edu": Mentor("Colin", "Lemarchand", "Colin", "clemarch@ucsd.edu"),
-    "melin@ucsd.edu": Mentor("Matias", "Lin", "Matias", "melin@ucsd.edu"),
-    "ejewik@ucsd.edu": Mentor("Emily", "Jewik", "Emily", "ejewik@ucsd.edu"),
-    "erxiao@ucsd.edu": Mentor("Eric", "Xiao", "Eric", "erxiao@ucsd.edu"),
-    "abruevic@ucsd.edu": Mentor("Alise", "Bruevich", "Alise", "abruevic@ucsd.edu"),
-    "ambar@ucsd.edu": Mentor("Amit", "Bar", "Amit", "ambar@ucsd.edu"),
-    "ddesu@ucsd.edu": Mentor("Dhanvi", "Desu", "Dhanvi", "ddesu@ucsd.edu"),
-    "tgarry@ucsd.edu": Mentor("Thomas", "Garry", "Thomas", "tgarry@ucsd.edu"),
-    "ettan@ucsd.edu": Mentor("Ethan", "Tan", "Ethan", "ettan@ucsd.edu"),
-    "lsteiner@ucsd.edu": Mentor("Lily", "Steiner", "Lily", "lsteiner@ucsd.edu"),
-    "l4gonzal@ucsd.edu": Mentor("Lailah", "Gonzalez", "Lailah", "l4gonzal@ucsd.edu"),
-    "akatwal@ucsd.edu": Mentor("Anisha", "Atwal", "Anisha", "akatwal@ucsd.edu"),
-    "acw011@ucsd.edu": Mentor("Alvin", "Wang", "Alvin", "acw011@ucsd.edu"),
-    "agarza@ucsd.edu": Mentor("Alexander", "Garza", "Alex", "agarza@ucsd.edu"),
-    "dmcao@ucsd.edu": Mentor("David", "Cao", "David", "dmcao@ucsd.edu"),
-    "rpmclaug@ucsd.edu": Mentor("Ryan", "McLaughlin", "Ryan", "rpmclaug@ucsd.edu"),
-    "stn005@ucsd.edu": Mentor("Steven", "Nguyen", "Steven", "stn005@ucsd.edu"),
+    "alal@ucsd.edu": Mentor("Akshat", "Lal", "Akshat", "alal@ucsd.edu"),
+    "dam001@ucsd.edu": Mentor("Diego", "Martinez", "Diego", "dam001@ucsd.edu"),
+    "e3brooks@ucsd.edu": Mentor("Elisa", "Brooks", "Elisa", "e3brooks@ucsd.edu"),
+    "hgrehm@ucsd.edu": Mentor("Hannah", "Grehm", "Hannah", "hgrehm@ucsd.edu"),
+    "hluu@ucsd.edu": Mentor("Henry", "Luu", "Henry", "hluu@ucsd.edu"),
+    "hxiao@ucsd.edu": Mentor("Henry", "Xiao", "Henry", "hxiao@ucsd.edu"),
+    "jftruong@ucsd.edu": Mentor("Jenelle", "Truong", "Jenelle", "jftruong@ucsd.edu"),
+    "jjdrisco@ucsd.edu": Mentor("John", "Driscoll", "John", "jjdrisco@ucsd.edu"),
+    "jktran@ucsd.edu": Mentor("Jonny", "Tran", "Jonny", "jktran@ucsd.edu"),
+    "jdcross@ucsd.edu": Mentor("Josh", "Cross", "Josh", "jdcross@ucsd.edu"),
+    "lmanzano@ucsd.edu": Mentor("Lindsey", "Manzano", "Lindsey", "lmanzano@ucsd.edu"),
+    "miivanov@ucsd.edu": Mentor("Michael", "Ivanov", "Michael", "miivanov@ucsd.edu"),
+    "nrejai@ucsd.edu": Mentor("Nikki", "Rejai", "Nikki", "nrejai@ucsd.edu"),
+    "phalder@ucsd.edu": Mentor("Prothit", "Halder", "Prothit", "phalder@ucsd.edu"),
+    "tyx001@ucsd.edu": Mentor("Tristin", "Xie", "Tristin", "tyx001@ucsd.edu"),
+    "yahmad@ucsd.edu": Mentor("Younus", "Ahmad", "Younus", "yahmad@ucsd.edu"),
+    "ygupta@ucsd.edu": Mentor("Yukati", "Gupta", "Yukati", "ygupta@ucsd.edu"),
 }
 
 
@@ -672,13 +680,13 @@ class Bot(commands.Bot):
         await super().close()
 
 
-bot = Bot("/")
+bot = Bot("!")
 bot.remove_command("help")
 
 
 @bot.event
 async def on_ready():
-    activity = discord.Game(name="Gary says")
+    activity = discord.Game(name="SPIS prep!")
     # activity = discord.Activity(
     #     type=discord.ActivityType.watching, name="your every move"
     # )
@@ -743,17 +751,18 @@ async def on_member_join(member):
 
 
 # for testing
-@bot.command(name="testjoin")
-@commands.has_role("Mentor")
+@bot.command(name="verify")
+#@commands.has_role("Mentor")
 async def testjoin(ctx):
-    await join(ctx.message.author)
+    if ctx.message.author.id not in state["student_map"]:
+        await join(ctx.message.author)
 
 
 async def join(member):
     intro = """
-Yo yo yo! Welcome to SPIS 2020. I'm **Picobot**, an automated bot here to help manage and moderate the SPIS 2020 Discord!
+Yo yo yo! Welcome to SPIS 2021. I'm **SPISBot**, an automated bot here to help manage and moderate the SPIS 2021 Discord!
 
-For now, I'm here to help welcome you to the SPIS 2020 Discord server. You'll notice that as of right now, you can't type in any of the channels. Don't worry; this is so that we can protect ourselves against random people from joining our server, and so that we can verify who you are before you can talk in the Discord. Before you can get started and hang out with everyone else, I need to know who you are first.
+For now, I'm here to help welcome you to the SPIS 2021 Discord server. You'll notice that as of right now, you can't type in any of the channels. Don't worry; this is so that we can protect ourselves against random people from joining our server, and so that we can verify who you are before you can talk in the Discord. Before you can get started and hang out with everyone else, I need to know who you are first.
 
 With that being said, let's get started!
 """
@@ -772,7 +781,7 @@ The first thing you should do is **claim your Discord account**. This basically 
 
     email = """
 Now that that's out of the way, in order to let you talk in the Discord server, I need to know who you are first!
-**Please text me your `@ucsd.edu` email:**
+**Please send me your `@ucsd.edu` email:**
 """
     embed = discord.Embed(title="Email verification", description=email)
     await member.send(embed=embed)
@@ -809,8 +818,7 @@ async def verify_email(member):
     state["student_map"][message.author.id] = s.email
     # Send back the user info so that they can verify it's correct
     msg = """
-Thanks for the info! I found someone with a matching email. Please confirm that this person is you by *reacting* with a thumbs up or thumbs down emoji.
-You can do this by clicking/tapping the thumbs up/thumbs down buttons below this message:
+Thanks for the info! I found someone with a matching email. Please confirm that this person is you by clicking one of the buttons below this message.
 
 _If the preferred name is incorrect, just let your mentor know and we'll fix it after opening day._
 """
@@ -820,30 +828,46 @@ _If the preferred name is incorrect, just let your mentor know and we'll fix it 
     embed.add_field(name="Preferred name", value=f"{s.preferred}")
     embed.add_field(name="Email", value=s.email)
 
-    reply = await member.send(embed=embed)
+    components = ActionRow(
+        Button(
+            label="This is me!",
+            custom_id="confirm_identity",
+            emoji="✅",
+            style=ButtonColor.green
+        ),
+        Button(
+            label="This isn't me!",
+            custom_id="deny_identity",
+            emoji="❌",
+            style=ButtonColor.red
+        )
+    )
 
-    await reply.add_reaction("👍")
-    await reply.add_reaction("👎")
+    reply = await member.send(embed=embed, components=components)
 
     # The wait_for returns when *any* reaction is added anywhere; we have to make sure that
     # we're reacting to the correct message
-    def check(reaction, user):
+    def check(i: discord.Interaction, b: discord.ButtonClick):
         return (
-            user == message.author
-            and reaction.message.id == reply.id
-            and (str(reaction.emoji) == "👍" or str(reaction.emoji) == "👎")
+            i.author == member
+            and i.message == reply
+            and (b.custom_id == "confirm_identity" or b.custom_id == "deny_identity")
         )
 
-    reaction, _ = await bot.wait_for("reaction_add", check=check)
+    interaction, button = await bot.wait_for("button_click", check=check)
+    user = interaction.author
+    button_id = button.custom_id
 
-    if str(reaction.emoji) == "👍":
+    await interaction.edit(components=[])
+
+    if button_id == "confirm_identity":
         # Confirmed!
 
         # We first initialize their nickname
         # try so that it doesn't panic if we can't change nick (which won't
         # work for the server owner)
         try:
-            await member.edit(nick=f"{s.preferred}")
+            await user.edit(nick=f"{s.preferred}")
         except:
             pass
 
@@ -853,14 +877,14 @@ _If the preferred name is incorrect, just let your mentor know and we'll fix it 
         desc = f"""
 Congrats! You've finished the first-time setup. It's nice to meet you, {s.preferred} :)
 
-Now that we've verified who you are, you now have access to all of the different text and voice chats in the Discord server. Eventually, we'll be showing you how to use all these different parts of the server through live walkthroughs and write-ups.
+Now that we've verified who you are, you now have access to all of the text and voice chats in the Discord server. Eventually, we'll be showing you how to use all these different parts of the server through live walkthroughs and write-ups.
 
-For now, you should read through the different informational text channels we have on the server:
+For now, you should read through the informational text channels we have on the server:
 
-- `#discord-info` has more information on what each of the channels in the Discord server are for.
-- `#announcements` contains SPIS-wide announcements regarding assignment deadlines and other urgent info.
+- <#864372817867964446> has more information on what each of the channels in the Discord server is for.
+- <#864372838844727326> contains SPIS-wide announcements regarding assignment deadlines and other urgent info.
 
-Beyond that, all there is to do now is to **jump in and start getting to know your mentors and your fellow mentees!** Our general text chat for hanging out is (appropriately) called `#hanging-out`, so hop on and introduce yourself!
+Beyond that, all there is to do now is to **jump in and start getting to know your mentors and your fellow mentees!** Our general text chat for hanging out is (appropriately) called <#868552432102285373>, so hop on and introduce yourself!
 
 Have fun, and welcome to SPIS!
 """
@@ -904,7 +928,7 @@ async def init_roles(member):
     labs = get(member.guild.categories, id=category_lab)
 
     if not get(member.guild.voice_channels, name=pair_name):
-        nc = await member.guild.create_voice_channel(pair_name, category=labs)
+        nc = await member.guild.create_voice_channel(pair_name, bitrate=64000, user_limit=0, category=labs)
         await nc.set_permissions(member.guild.default_role, view_channel=False)
         await nc.set_permissions(
             get(member.guild.roles, name="Professor"), view_channel=True
@@ -930,7 +954,7 @@ async def init_roles(member):
         mentor_cat = get(member.guild.categories, id=category_mentors)
 
         if not get(member.guild.voice_channels, name=mentor_name):
-            nc = await member.guild.create_voice_channel(mentor_name, category=mentor_cat)
+            nc = await member.guild.create_voice_channel(mentor_name, bitrate=64000, user_limit=0, category=mentor_cat)
             await nc.set_permissions(member.guild.default_role, view_channel=False)
             await nc.set_permissions(
                 get(member.guild.roles, name="Professor"), view_channel=True
@@ -967,129 +991,72 @@ async def add_ticket(creator, description, admin_roles):
             students[state["student_map"][creator.id]].partners(students)
         ):
             embed.add_field(name=f"Partner {i}", value=p.preferred, inline=True)
+    
+    acceptButton = Button(label="Accept", custom_id="accept_ticket", emoji="🧑‍💻", style=ButtonColor.blurple)
+    returnToQueue = Button(label="Return to Queue", custom_id="return_ticket", emoji="❌", style=ButtonColor.red)
+    completeButton = Button(label="Complete", custom_id="finish_ticket", emoji="✅", style=ButtonColor.green)
 
-    msg = await bot.get_channel(channel_mentor_queue).send(embed=embed)
+    msg = await bot.get_channel(channel_mentor_queue).send(embed=embed, components=ActionRow(acceptButton, completeButton))
 
-    await msg.add_reaction("👍")
-    await msg.add_reaction("☑️")
+    # await msg.add_reaction("👍")
+    # await msg.add_reaction("☑️")
 
     # Message user that their ticket was created
     await creator.send(
         "Your ticket was created! A list of all the tickets in the queue is in the `#ticket-queue` channel.",
-        embed=embed,
+        embed=embed
     )
 
-    resolved = False
-
-    while not resolved:
-
-        def check(reaction, user):
-            return (
-                any([x in user.roles for x in admin_roles])
-                and reaction.message.id == msg.id
-                and (
-                    (
-                        str(reaction.emoji) == "👍"
-                        and user.id
-                        not in [
-                            x.mentor_id
-                            for x in state["tickets"]
-                            if x.state == TicketState.PROG
-                        ]
-                    )
-                    or str(reaction.emoji) == "☑️"
+    def _check(i: discord.Interaction, b: discord.ButtonClick):
+        return (
+            i.message == msg 
+            and
+            any([x in i.member.roles for x in admin_roles])
+            and
+            (
+                (
+                    b.custom_id == "accept_ticket" or b.custom_id == "return_ticket"
+                    and i.member.id
+                    not in [
+                        x.mentor_id
+                        for x in state["tickets"]
+                        if x.state == TicketState.PROG
+                    ]
                 )
+                or b.custom_id == "finish_ticket"
             )
-
-        reaction, user = await bot.wait_for("reaction_add", check=check)
-
-        if str(reaction.emoji) == "☑️":
-            # Ticket closed without resolution
-            t.state = TicketState.DONE
-            await msg.delete()
-
-            # Message user that their ticket was closed
-            closed_desc = f"Your ticket was closed without resolution by <@!{user.id}>. You can contact them directly via DM for more information."
-            closed_embed = discord.Embed(
-                title=f"Ticket #{tid} closed", description=closed_desc
-            )
-
-            await creator.send(embed=closed_embed)
-
-            return
-
-        t.mentor_id = user.id
-
-        if (
-            hasattr(creator, "voice")
-            and creator.voice is not None
-            and creator.voice.channel is not None
-        ):
-            if user.voice is not None:
-                await user.move_to(creator.voice.channel)
-            else:
-                voice_desc = f"Student <@!{creator.id}> is currently located in voice channel `{creator.voice.channel}.`"
-                voice_embed = discord.Embed(
-                    title=f"Ticket #{tid} accepted", description=voice_desc
-                )
-                await user.send(embed=voice_embed)
-        else:
-            voice_desc = f"Student <@!{creator.id}> is not located in a voice channel."
-            voice_embed = discord.Embed(
-                title=f"Ticket #{tid} accepted", description=voice_desc
-            )
-            await user.send(embed=voice_embed)
-
-        # Notify student
-        accept_desc = f"Your ticket has been accepted by <@!{user.id}>; you'll be receiving assistance from them shortly."
-        accept_embed = discord.Embed(
-            title=f"Ticket #{tid} accepted", description=accept_desc
         )
-        await creator.send(embed=accept_embed)
 
-        # Edit the original message to reflect the current mentor
-        new_embed = discord.Embed(title=f"#{tid}", description=description)
-        new_embed.add_field(name="Current mentor", value=f"<@!{user.id}>", inline=False)
-        new_embed.add_field(name="Creator", value=f"<@!{creator.id}>", inline=True)
-        if creator.id in state["student_map"]:
-            for i, p in enumerate(
-                students[state["student_map"][creator.id]].partners(students)
-            ):
-                new_embed.add_field(name=f"Partner {i}", value=p.preferred, inline=True)
+    resolved = False
+    accepted = False
+    while not resolved:
+        interaction, button = await bot.wait_for("button_click", check=_check)
+        user = interaction.member
+        button_id = button.custom_id
 
-        await msg.edit(embed=new_embed)
+        await interaction.defer()
 
-        def add_check(reaction, ur):
-            return (
-                ur == user
-                and reaction.message.id == msg.id
-                and str(reaction.emoji) == "☑️"
-            )
+        if button_id == "finish_ticket":
+            if not accepted:
+                # Ticket closed without resolution
+                t.state = TicketState.DONE
+                resolved = True
+                await msg.delete()
 
-        def remove_check(reaction, ur):
-            return (
-                ur == user
-                and reaction.message.id == msg.id
-                and str(reaction.emoji) == "👍"
-            )
+                # Message user that their ticket was closed
+                closed_desc = f"Your ticket was closed without resolution by <@!{user.id}>. You can contact them directly via DM for more information."
+                closed_embed = discord.Embed(
+                    title=f"Ticket #{tid} closed", description=closed_desc
+                )
 
-        # Wait for either unaccept or resolve
-        pending = [
-            bot.wait_for("reaction_add", check=add_check),
-            bot.wait_for("reaction_remove", check=remove_check),
-        ]
-        done, pending = await asyncio.wait(pending, return_when=asyncio.FIRST_COMPLETED)
+                await creator.send(embed=closed_embed)
 
-        for task in pending:
-            task.cancel()
-
-        for task in done:
-            rr, user = await task
-
-            if str(rr.emoji) == "☑️":
+                return
+            else:
                 # This ticket is complete!
                 # Delete it and set its state accordingly
                 t.state = TicketState.DONE
+                resolved = True
                 await msg.delete()
 
                 # Message user that their ticket was closed
@@ -1101,21 +1068,66 @@ async def add_ticket(creator, description, admin_roles):
                 await creator.send(embed=resolved_embed)
 
                 return
+
+        if accepted:
+            # This ticket isn't complete
+            t.mentor_id = None
+            accepted = False
+
+            # Set its embed back to the original embed
+            await msg.edit(embed=embed, components=ActionRow(acceptButton, completeButton))
+
+            # Message user that their ticket was unaccepted
+            unaccepted_desc = f"Your ticket could not be resolved by <@!{user.id}>. It has been added back to the queue."
+            unaccepted_embed = discord.Embed(
+                title=f"Ticket #{tid} unaccepted", description=unaccepted_desc
+            )
+
+            await creator.send(embed=unaccepted_embed)
+        else:
+            # Accept this ticket
+            t.mentor_id = user.id
+            accepted = True
+
+            if (
+                hasattr(creator, "voice")
+                and creator.voice is not None
+                and creator.voice.channel is not None
+            ):
+                if user.voice is not None:
+                    await user.move_to(creator.voice.channel)
+                else:
+                    voice_desc = f"Student <@!{creator.id}> is currently located in voice channel `{creator.voice.channel}.`"
+                    voice_embed = discord.Embed(
+                        title=f"Ticket #{tid} accepted", description=voice_desc
+                    )
+                    await user.send(embed=voice_embed)
             else:
-                # This ticket isn't complete
-                t.mentor_id = None
-
-                # Set its embed back to the original embed
-                await msg.edit(embed=embed)
-
-                # Message user that their ticket was unaccepted
-                unaccepted_desc = f"Your ticket could not be resolved by <@!{user.id}>. It has been added back to the queue."
-                unaccepted_embed = discord.Embed(
-                    title=f"Ticket #{tid} unaccepted", description=unaccepted_desc
+                voice_desc = f"Student <@!{creator.id}> is not located in a voice channel."
+                voice_embed = discord.Embed(
+                    title=f"Ticket #{tid} accepted", description=voice_desc
                 )
+                await user.send(embed=voice_embed)
 
-                await creator.send(embed=unaccepted_embed)
+            # Notify student
+            accept_desc = f"Your ticket has been accepted by <@!{user.id}>; you'll be receiving assistance from them shortly."
+            accept_embed = discord.Embed(
+                title=f"Ticket #{tid} accepted", description=accept_desc
+            )
+            await creator.send(embed=accept_embed)
 
+            # Edit the original message to reflect the current mentor
+            new_embed = discord.Embed(title=f"#{tid}", description=description)
+            new_embed.add_field(name="Current mentor", value=f"<@!{user.id}>", inline=False)
+            new_embed.add_field(name="Creator", value=f"<@!{creator.id}>", inline=True)
+            if creator.id in state["student_map"]:
+                for i, p in enumerate(
+                    students[state["student_map"][creator.id]].partners(students)
+                ):
+                    new_embed.add_field(name=f"Partner {i}", value=p.preferred, inline=True)
+
+            await msg.edit(embed=new_embed, components=ActionRow(returnToQueue, completeButton))
+    
 
 @bot.command(name="onduty")
 @commands.has_role("Mentor")
@@ -1190,14 +1202,14 @@ async def breakout(ctx, arg=None):
     if arg is None:
         embed = discord.Embed(
             title="Couldn't create breakouts",
-            description="Please provide an argument to specify the number of breakouts (e.g. `/breakout 4`) or the category by which to create the breakouts (e.g. `/breakout mentor`, `/breakout pair`, or `/breakout prof`)",
+            description="Please provide an argument to specify the number of breakouts (e.g. `!breakout 4`) or the category by which to create the breakouts (e.g. `!breakout mentor`, `!breakout pair`, or `!breakout prof`)",
             color=discord.Color.red(),
         )
         await ctx.send(embed=embed)
         return None
 
     # We create a random identifier for this breakout session
-    prefix = breakout_prefix(breakout_ident())
+    prefix = breakout_prefix(ctx.author.nick)
 
     split_members = []
 
@@ -1230,7 +1242,7 @@ async def breakout(ctx, arg=None):
     else:
         embed = discord.Embed(
             title="Couldn't create breakouts",
-            description="Please provide a valid argument to specify the number of breakouts (e.g. `/breakout 4`) or the category by which to create the breakouts (e.g. `/breakout mentor`, `/breakout pair`, or `/breakout prof`)",
+            description="Please provide a valid argument to specify the number of breakouts (e.g. `!breakout 4`) or the category by which to create the breakouts (e.g. `!breakout mentor`, `!breakout pair`, or `!breakout prof`)",
             color=discord.Color.red(),
         )
         await ctx.send(embed=embed)
@@ -1240,7 +1252,7 @@ async def breakout(ctx, arg=None):
         # Create a breakout channel
         breakout = get(ctx.guild.categories, id=category_breakout)
 
-        vc = await ctx.guild.create_voice_channel(f"{prefix}-{i + 1}", category=breakout)
+        vc = await ctx.guild.create_voice_channel(f"{prefix}-{i + 1}", bitrate=64000, user_limit=0, category=breakout)
         for m in ms:
             await m.move_to(vc)
 
@@ -1250,7 +1262,7 @@ async def breakout(ctx, arg=None):
 ##################
 @bot.command(name="timeout")
 async def timeout(ctx, member: discord.Member, secs):
-    timeout_channel = 741401483144069215
+    timeout_channel = 869462241093771326
     c = discord.utils.get(ctx.guild.voice_channels, id=timeout_channel)
 
     if member.voice is not None and member.voice.channel is not None:
@@ -1276,7 +1288,7 @@ async def start_poll(ctx, name=None, *args):
         # Error out: Polls need a name
         embed = discord.Embed(
             title="Poll creation error",
-            description="Polls must have a title! Specify a title like so: `/poll Title`",
+            description="Polls must have a title! Specify a title like so: `!poll Title`",
             color=discord.Color.red(),
         )
         await ctx.send(embed=embed)
@@ -1319,25 +1331,25 @@ async def start_poll(ctx, name=None, *args):
 
 @bot.command(name="help")
 async def help(ctx):
-    footer = "spisbot 2020-08-05 | https://github.com/dcao/spisbot"
+    footer = "spisbot 2021-07-26 | https://github.com/TheCrossBoy/spisbot"
 
     desc = """
-spisbot is the custom-made robot designed to help manage the SPIS 2020 Discord server. While you can send me commands to make me do things, I'm also always sitting in the background to help welcome people to the SPIS server and manage queue tickets.
+spisbot is the custom-made robot designed to help manage the SPIS 2021 Discord server. While you can send me commands to make me do things, I'm also always sitting in the background to help welcome people to the SPIS server and manage queue tickets.
 
 **General commands**
 
-- `/icebreaker`: returns a random icebreaker question. Good for getting to know your fellow mentees!
-- `/unprofessional`: returns an unprofessional icebreaker question. Good if you're an unprofessional person!
-- `/emojify <text>`: turns some text into emojis :)
-- `/wide`: when called as the comment on an image: widens the image :))
+- `!help`: opens this menu, which shows information about the bot!
+- `!emojify <text>`: turns some text into emojis :)
+- `!wide`: when called as the comment on an image: widens the image :))
     
-**Administrator commands**
+**Mentor commands**
 
-- `/onduty` - add the "On Duty" role to show that you're on duty.
-- `/offduty` - add the "Off Duty" role to show that you're off duty.
-- `/breakout <arg>` - if arg is `mentor`, split into mentor groups. otherwise, create `arg` different breakout rooms and split mentees and admins evenly in each.
-- `/bkclose [ident]` - close breakouts with identifier `ident` if specified; closes all breakouts otherwise
-- `/recall` - move all people in a VC to your current VC.
+- `!onduty`: add the "On Duty" role to show that you're on duty.
+- `!offduty`: add the "Off Duty" role to show that you're off duty.
+- `!breakout n`: create `n` breakout rooms, for example, `!breakout 2` creates `2` breakout rooms.
+- `!breakout type`: create breakout rooms based on type specified. `mentor` divides based on Mentor and `prof` divides based on assigned Professor. 
+- `!bkclose [ident]`: close breakout rooms with identifier `ident` if specified; closes all breakout roms otherwise
+- `!recall`: move all people in a Voice Channel to your current Voice Channel.
 
 If you're trying to call any other commands, keep this in mind:
 
@@ -1350,27 +1362,6 @@ If you're trying to call any other commands, keep this in mind:
 
     await ctx.message.channel.send(embed=embed)
 
-# Get a random icebreaker question!
-@bot.command("icebreaker")
-async def icebreaker(ctx):
-    questions = [
-        "What are some things you’ve heard about your respective colleges?",
-        "If you had a sixth college pet raccoon, what would you name them?",
-        "What’s something everyone would look dumb doing?",
-        "Who was your childhood actor/actress crush?",
-        "Which cartoon character do you relate to the most?",
-        "What major would you choose if you did not have your current major?",
-        "What’s the best tv series you have ever seen?",
-        "The zombie apocalypse is coming, which 3 people are you taking to survive?",
-    ]
-
-    await ctx.channel.send(random.choice(questions))
-    
-@bot.command("unprofessional")
-async def unprofessional(ctx):
-    questions = os.getenv("QUESTIONS").split(';')
-
-    await ctx.channel.send(random.choice(questions))
 
 
 @bot.command("emojify")
@@ -1439,9 +1430,21 @@ async def wide(ctx):
             imr.save(buf, format='PNG')
             buf.seek(0)
             await ctx.send(file=discord.File(buf, "wide.png"))
+
+@bot.command("presence")
+@commands.has_role("Mentor")
+async def presence(ctx, *args):
+    status = args[-1]
+    if hasattr(discord.Status, status):
+        status = getattr(discord.Status, status)
+        args = args[:-1]
+    else:
+        status = discord.Status.online
+    
+    await bot.change_presence(activity=discord.Game(name=" ".join(args)), status=status)
             
             
-@bot.command("goodbye")
+"""@bot.command("goodbye")
 async def goodbye(ctx):
     message = '''
 @everyone
@@ -1455,7 +1458,7 @@ When I see you again...
 ```
 '''
     await ctx.send(message)
-
+"""
 
 ##################
 # ADMIN COMMANDS #
@@ -1464,8 +1467,10 @@ When I see you again...
 # Purge all messages from a channel
 @bot.command(name="purge")
 @commands.has_role("Mentor")
-async def purge(ctx):
-    await ctx.channel.purge()
+async def purge(ctx, limit=10):
+    if limit == None or int(limit) > 50:
+        limit = 50
+    await ctx.channel.purge(limit=int(limit))
 
 
 @bot.command(name="rmuser")
@@ -1525,7 +1530,7 @@ async def sync_mentor_channels(ctx):
         if role.name.startswith("mentor--"):
 
             if not get(ctx.guild.voice_channels, name=role):
-                nc = await ctx.guild.create_voice_channel(role.name, category=mentors)
+                nc = await ctx.guild.create_voice_channel(role.name, bitrate=64000, user_limit=0, category=mentors)
                 await nc.set_permissions(ctx.guild.default_role, view_channel=False)
                 await nc.set_permissions(
                     get(ctx.guild.roles, name="Professor"), view_channel=True
