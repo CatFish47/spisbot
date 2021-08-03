@@ -511,7 +511,7 @@ students = {
     "sil045@ucsd.edu": Mentee(
 		"Sizhe",
 		"Li",
-		"Sizhe",
+		"Steven",
 		"sil045@ucsd.edu",
 		["twchu@ucsd.edu"],
 		"jdcross@ucsd.edu",
@@ -1405,14 +1405,11 @@ def what_doing(text):
     return ("what are" in text or "what am" in text) and "doin" in text
 
 
-@bot.event
+"""@bot.event
 async def on_message(message):
     # What are we doing?
     if message.author.id != bot.user.id:
-        if what_doing(message.content):
-            state["ea_count"] += 1
-            await message.channel.send(f"each other! (count: {state['ea_count']})")
-        elif message.channel.id == channel_need_help:
+        if message.channel.id == channel_need_help:
             admin_roles = [
                 get(message.guild.roles, name="Mentor"),
                 get(message.guild.roles, name="Professor"),
@@ -1421,7 +1418,18 @@ async def on_message(message):
                 await add_ticket(message.author, message.content, admin_roles)
 
     await bot.process_commands(message)
+"""
 
+@bot.listen("on_message")
+async def process_tickets(message):
+    if message.author.id != bot.user.id:
+        if message.channel.id == channel_need_help:
+            admin_roles = [
+                get(message.guild.roles, name="Mentor"),
+                get(message.guild.roles, name="Professor"),
+            ]
+            if id_not_in_q(message.author.id):
+                await add_ticket(message.author, message.content, admin_roles)
 
 @bot.command("wide")
 async def wide(ctx):
