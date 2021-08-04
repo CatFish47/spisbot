@@ -1011,6 +1011,7 @@ async def add_ticket(creator, description, admin_roles):
     )
 
     def _check(i: discord.Interaction, b: discord.ButtonClick):
+        print("Checking", i, b)
         return (
             i.message == msg 
             and
