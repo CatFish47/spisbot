@@ -1034,14 +1034,18 @@ async def add_ticket(creator, description, admin_roles):
     resolved = False
     accepted = False
     while not resolved:
+        print("In loop for ticket", tid)
         interaction, button = await bot.wait_for("button_click", check=_check)
+        print("Received interaction for ticket", tid)
         user = interaction.member
         button_id = button.custom_id
 
         await interaction.defer()
 
         if button_id == "finish_ticket":
+            print("Ticket", tid, "Finish")
             if not accepted:
+                print("Ticket", tid, "Close")
                 # Ticket closed without resolution
                 t.state = TicketState.DONE
                 resolved = True
@@ -1057,6 +1061,7 @@ async def add_ticket(creator, description, admin_roles):
 
                 return
             else:
+                print("Ticket", tid, "Complete")
                 # This ticket is complete!
                 # Delete it and set its state accordingly
                 t.state = TicketState.DONE
@@ -1074,6 +1079,7 @@ async def add_ticket(creator, description, admin_roles):
                 return
 
         if accepted:
+            print("Ticket", tid, "Return to queue")
             # This ticket isn't complete
             t.mentor_id = None
             accepted = False
@@ -1089,6 +1095,7 @@ async def add_ticket(creator, description, admin_roles):
 
             await creator.send(embed=unaccepted_embed)
         else:
+            print("Ticket", tid, "Accept")
             # Accept this ticket
             t.mentor_id = user.id
             accepted = True
