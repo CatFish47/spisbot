@@ -1,6 +1,6 @@
 # spisbot
 
-spisbot is a Discord bot used to manage the SPIS 2021 Discord server.
+spisbot is a Discord bot used to manage the SPIS 2022 Discord server.
 At the moment, it provides the following features:
 
 - **Automated onboarding** for new students.
