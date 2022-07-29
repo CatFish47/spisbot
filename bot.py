@@ -760,9 +760,9 @@ async def testjoin(ctx):
 
 async def join(member):
     intro = """
-Yo yo yo! Welcome to SPIS 2021. I'm **SPISBot**, an automated bot here to help manage and moderate the SPIS 2021 Discord!
+Yo yo yo! Welcome to SPIS 2021. I'm **SPISBot**, an automated bot here to help manage and moderate the SPIS 2022 Discord!
 
-For now, I'm here to help welcome you to the SPIS 2021 Discord server. You'll notice that as of right now, you can't type in any of the channels. Don't worry; this is so that we can protect ourselves against random people from joining our server, and so that we can verify who you are before you can talk in the Discord. Before you can get started and hang out with everyone else, I need to know who you are first.
+For now, I'm here to help welcome you to the SPIS 2022 Discord server. You'll notice that as of right now, you can't type in any of the channels. Don't worry; this is so that we can protect ourselves against random people from joining our server, and so that we can verify who you are before you can talk in the Discord. Before you can get started and hang out with everyone else, I need to know who you are first.
 
 With that being said, let's get started!
 """
