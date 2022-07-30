@@ -86,11 +86,11 @@ class Mentor:
 ##########
 
 channel_announcements = 1003017006162907246
-channel_mentor_queue = 869402812189118515
-channel_need_help = 869402827271856198
-category_breakout = 869403135070838845
-category_lab = 868539125081444423
-category_mentors = 869460015692521512
+channel_mentor_queue = 1003078378154377256
+channel_need_help = 1003077822161629274
+category_breakout = 1003078148566552636
+category_lab = 1003077628623847424
+category_mentors = 1003078093205946429
 
 mentor_role = "Mentors"
 mentee_role = "Mentees"
@@ -110,13 +110,22 @@ ucsd_email: Mentee(
 ),
 '''
 students = {
-    "agudi@ucsd.edu": Mentee(
-		"Adi",
-		"Gudi",
-		"Adi",
-		"agudi@ucsd.edu",
-		["adhami@ucsd.edu"],
-		"hxiao@ucsd.edu",
+    "ping@ucsd.edu": Mentee(
+		"Ping",
+		"Ping",
+		"Ping",
+		"ping@ucsd.edu",
+		["pong@ucsd.edu"],
+		"gxcheng@ucsd.edu",
+		"niema"
+	),
+    "pong@ucsd.edu": Mentee(
+		"Pong",
+		"Pong",
+		"Pong",
+		"pong@ucsd.edu",
+		["ping@ucsd.edu"],
+		"gxcheng@ucsd.edu",
 		"niema"
 	)
 }
@@ -126,7 +135,7 @@ students = {
 Structure:
 ucsd_email: Mentor(first_name, last_name, preferred_name, ucsd_email),
 '''
-mentors = {"alal@ucsd.edu": Mentor("Akshat", "Lal", "Akshat", "alal@ucsd.edu")}
+mentors = {"gxcheng@ucsd.edu": Mentor("Grant", "Cheng", "Grant", "gxcheng@ucsd.edu")}
 
 
 ################
@@ -259,16 +268,14 @@ async def verify_state(ctx):
 # ONBOARDING #
 ##############
 
-# TODO: Look at this code
 @bot.event
 async def on_member_join(member):
     if member.id not in state["student_map"]:
         await join(member)
 
-
 # for testing
 @bot.command(name="verify")
-#@commands.has_role(mentor_role)
+# @commands.has_role(mentor_role)
 async def testjoin(ctx):
     if ctx.message.author.id not in state["student_map"]:
         await join(ctx.message.author)
@@ -678,6 +685,10 @@ async def clear_tickets(ctx):
 
     await bot.get_channel(channel_mentor_queue).purge()
 
+@bot.command(name="dumptickets")
+@commands.has_role(mentor_role)
+async def dump_tickets(ctx):
+    print(state["tickets"])
 
 #############
 # BREAKOUTS #
@@ -1138,6 +1149,10 @@ async def purge_roles(ctx):
         except:
             print(f"Couldn't remove roles from {m}")
 
+@bot.command(name="clearstudents")
+@commands.has_role(mentor_role)
+async def clear_students(ctx):
+    state["student_map"] = {}
 
 @bot.command(name="shutdown")
 @commands.has_role(mentor_role)
