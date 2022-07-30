@@ -92,7 +92,23 @@ category_breakout = 869403135070838845
 category_lab = 868539125081444423
 category_mentors = 869460015692521512
 
+mentor_role = "Mentors"
+mentee_role = "Mentees"
+professor_role = "Instructors"
+
 # students is a map from an email to the student info
+'''
+Structure:
+ucsd_email: Mentee(
+    first_name,
+    last_name,
+    preferred_name,
+    ucsd_email,
+    [partner_email],
+    mentor_email,
+    professor_name
+),
+'''
 students = {
     "agudi@ucsd.edu": Mentee(
 		"Adi",
@@ -102,515 +118,15 @@ students = {
 		["adhami@ucsd.edu"],
 		"hxiao@ucsd.edu",
 		"niema"
-	),
-    "adm008@ucsd.edu": Mentee(
-		"Adrian",
-		"Mendoza",
-		"Adrian",
-		"adm008@ucsd.edu",
-		["sprestrelski@ucsd.edu"],
-		"hgrehm@ucsd.edu",
-		"curt"
-	),
-    "cachiu@ucsd.edu": Mentee(
-		"Aerin",
-		"Chiu",
-		"Aerin",
-		"cachiu@ucsd.edu",
-		["juh016@ucsd.edu"],
-		"ygupta@ucsd.edu",
-		"gary"
-	),
-    "a3ahmed@ucsd.edu": Mentee(
-		"Aisha",
-		"Ahmed",
-		"Aisha",
-		"a3ahmed@ucsd.edu",
-		["jsimpauco@ucsd.edu"],
-		"dam001@ucsd.edu",
-		"gary"
-	),
-    "ajwong@ucsd.edu": Mentee(
-		"Alex",
-		"Wong",
-		"Alex",
-		"ajwong@ucsd.edu",
-		["tkn003@ucsd.edu"],
-		"ygupta@ucsd.edu",
-		"gary"
-	),
-    "arh003@ucsd.edu": Mentee(
-		"Alex",
-		"Hernandez",
-		"Alex",
-		"arh003@ucsd.edu",
-		["lkuruvila@ucsd.edu"],
-		"lmanzano@ucsd.edu",
-		"niema"
-	),
-    "adhami@ucsd.edu": Mentee(
-		"Amir",
-		"Dhami",
-		"Amir",
-		"adhami@ucsd.edu",
-		["agudi@ucsd.edu"],
-		"hxiao@ucsd.edu",
-		"niema"
-	),
-    "apurohit@ucsd.edu": Mentee(
-		"Anushka",
-		"Purohit",
-		"Anushka",
-		"apurohit@ucsd.edu",
-		["ovashishtha@ucsd.edu"],
-		"nrejai@ucsd.edu",
-		"gary"
-	),
-    "arkhanna@ucsd.edu": Mentee(
-		"Arnav",
-		"Khanna",
-		"Arnav",
-		"arkhanna@ucsd.edu",
-		["gxcheng@ucsd.edu"],
-		"hxiao@ucsd.edu",
-		"niema"
-	),
-    "bkreponte@ucsd.edu": Mentee(
-		"Brandon",
-		"Reponte",
-		"Brandon",
-		"bkreponte@ucsd.edu",
-		["jagranda@ucsd.edu"],
-		"miivanov@ucsd.edu",
-		"curt"
-	),
-    "cstam@ucsd.edu": Mentee(
-		"Caleb",
-		"Stam",
-		"Caleb",
-		"cstam@ucsd.edu",
-		["jjose@ucsd.edu"],
-		"lmanzano@ucsd.edu",
-		"niema"
-	),
-    "ehcho@ucsd.edu": Mentee(
-		"Esther",
-		"Cho",
-		"Esther",
-		"ehcho@ucsd.edu",
-		[],
-		"e3brooks@ucsd.edu",
-		"gary"
-	),
-    "e8huang@ucsd.edu": Mentee(
-		"Ethan",
-		"Huang",
-		"Ethan",
-		"e8huang@ucsd.edu",
-		["jctseng@ucsd.edu"],
-		"dam001@ucsd.edu",
-		"gary"
-	),
-    "etl003@ucsd.edu": Mentee(
-		"Ethan",
-		"Lin",
-		"Ethan",
-		"etl003@ucsd.edu",
-		["sep005@ucsd.edu"],
-		"yahmad@ucsd.edu",
-		"niema"
-	),
-    "frgarcia@ucsd.edu": Mentee(
-		"Francisco",
-		"Garcia",
-		"Francisco",
-		"frgarcia@ucsd.edu",
-		["g4smith@ucsd.edu"],
-		"jktran@ucsd.edu",
-		"curt"
-	),
-    "g4smith@ucsd.edu": Mentee(
-		"Ginger",
-		"Smith",
-		"Ginger",
-		"g4smith@ucsd.edu",
-		["frgarcia@ucsd.edu"],
-		"jktran@ucsd.edu",
-		"curt"
-	),
-    "gxcheng@ucsd.edu": Mentee(
-		"Grant",
-		"Cheng",
-		"Grant",
-		"gxcheng@ucsd.edu",
-		["arkhanna@ucsd.edu"],
-		"hxiao@ucsd.edu",
-		"niema"
-	),
-    "jjose@ucsd.edu": Mentee(
-		"Jared",
-		"Jose",
-		"Jared",
-		"jjose@ucsd.edu",
-		["cstam@ucsd.edu"],
-		"lmanzano@ucsd.edu",
-		"niema"
-	),
-    "jsimpauco@ucsd.edu": Mentee(
-		"Jared",
-		"Simpauco",
-		"Jared",
-		"jsimpauco@ucsd.edu",
-		["a3ahmed@ucsd.edu"],
-		"dam001@ucsd.edu",
-		"gary"
-	),
-    "jlk004@ucsd.edu": Mentee(
-		"Jeannie",
-		"Kim",
-		"Jeannie",
-		"jlk004@ucsd.edu",
-		["kalbao@ucsd.edu"],
-		"jftruong@ucsd.edu",
-		"niema"
-	),
-    "jcanicosa@ucsd.edu": Mentee(
-		"Jenna",
-		"Canicosa",
-		"Jenna",
-		"jcanicosa@ucsd.edu",
-		["lmei@ucsd.edu"],
-		"nrejai@ucsd.edu",
-		"gary"
-	),
-    "jctseng@ucsd.edu": Mentee(
-		"Jenny",
-		"Tseng",
-		"Jenny",
-		"jctseng@ucsd.edu",
-		["etl003@ucsd.edu"],
-		"dam001@ucsd.edu",
-		"gary"
-	),
-    "jtn018@ucsd.edu": Mentee(
-		"Jeremy",
-		"Nguyen",
-		"Jeremy",
-		"jtn018@ucsd.edu",
-		["rsunku@ucsd.edu"],
-		"alal@ucsd.edu",
-		"gary"
-	),
-    "jroe@ucsd.edu": Mentee(
-		"Jodi",
-		"Roe",
-		"Jodi",
-		"jroe@ucsd.edu",
-		["nkn004@ucsd.edu"],
-		"jjdrisco@ucsd.edu",
-		"niema"
-	),
-    "juh016@ucsd.edu": Mentee(
-		"Jun",
-		"Hwang",
-		"Jun",
-		"juh016@ucsd.edu",
-		["cachiu@ucsd.edu"],
-		"ygupta@ucsd.edu",
-		"gary"
-	),
-    "jagranda@ucsd.edu": Mentee(
-		"Justyce",
-		"Granda",
-		"Justyce",
-		"jagranda@ucsd.edu",
-		["bkreponte@ucsd.edu"],
-		"miivanov@ucsd.edu",
-		"curt"
-	),
-    "kalbao@ucsd.edu": Mentee(
-		"Keean",
-		"Albao",
-		"Keean",
-		"kalbao@ucsd.edu",
-		["jlk004@ucsd.edu"],
-		"jftruong@ucsd.edu",
-		"niema"
-	),
-    "lmei@ucsd.edu": Mentee(
-		"Larry",
-		"Mei",
-		"Larry",
-		"lmei@ucsd.edu",
-		["jcanicosa@ucsd.edu"],
-		"nrejai@ucsd.edu",
-		"gary"
-	),
-    "lkuruvila@ucsd.edu": Mentee(
-		"Leah",
-		"Kuruvila",
-		"Leah",
-		"lkuruvila@ucsd.edu",
-		["arh003@ucsd.edu"],
-		"lmanzano@ucsd.edu",
-		"niema"
-	),
-    "sep005@ucsd.edu": Mentee(
-		"Lydia",
-		"Park",
-		"Lydia",
-		"sep005@ucsd.edu",
-		["etl003@ucsd.edu"],
-		"yahmad@ucsd.edu",
-		"niema"
-	),
-    "marquerupa@ucsd.edu": Mentee(
-		"Marlyn",
-		"Arque Rupa",
-		"Marlyn",
-		"marquerupa@ucsd.edu",
-		["vvenkatesh@ucsd.edu"],
-		"jftruong@ucsd.edu",
-		"niema"
-	),
-    "mwada@ucsd.edu": Mentee(
-		"Michinori",
-		"Wada",
-		"Michinori",
-		"mwada@ucsd.edu",
-		["ndanan@ucsd.edu"],
-		"alal@ucsd.edu",
-		"gary"
-	),
-    "nkn004@ucsd.edu": Mentee(
-		"Nam",
-		"Nguyen",
-		"Nam",
-		"nkn004@ucsd.edu",
-		["jroe@ucsd.edu"],
-		"jjdrisco@ucsd.edu",
-		"niema"
-	),
-    "nlchung@ucsd.edu": Mentee(
-		"Newton",
-		"Chung",
-		"Newton",
-		"nlchung@ucsd.edu",
-		["pgrimaldo@ucsd.edu"],
-		"yahmad@ucsd.edu",
-		"niema"
-	),
-    "ndanan@ucsd.edu": Mentee(
-		"Noah",
-		"Danan",
-		"Noah",
-		"ndanan@ucsd.edu",
-		["mwada@ucsd.edu"],
-		"alal@ucsd.edu",
-		"gary"
-	),
-    "nseyoum@ucsd.edu": Mentee(
-		"Nola",
-		"Seyoum",
-		"Nola",
-		"nseyoum@ucsd.edu",
-		["tlmeyers@ucsd.edu"],
-		"miivanov@ucsd.edu",
-		"curt"
-	),
-    "ovashishtha@ucsd.edu": Mentee(
-		"Ojas",
-		"Vashishtha",
-		"Ojas",
-		"ovashishtha@ucsd.edu",
-		["apurohit@ucsd.edu"],
-		"nrejai@ucsd.edu",
-		"gary"
-	),
-    "omedinajr@ucsd.edu": Mentee(
-		"Oswaldo",
-		"Medina Jr",
-		"Oswaldo",
-		"omedinajr@ucsd.edu",
-		["rkafle@ucsd.edu"],
-		"hgrehm@ucsd.edu",
-		"curt"
-	),
-    "pgrimaldo@ucsd.edu": Mentee(
-		"Pedro",
-		"Grimaldo Jr",
-		"Pedro",
-		"pgrimaldo@ucsd.edu",
-		["nlchung@ucsd.edu"],
-		"yahmad@ucsd.edu",
-		"niema"
-	),
-    "pndang@ucsd.edu": Mentee(
-		"Phu",
-		"Dang",
-		"Phu",
-		"pndang@ucsd.edu",
-		["unaik@ucsd.edu"],
-		"jjdrisco@ucsd.edu",
-		"niema"
-	),
-    "rsunku@ucsd.edu": Mentee(
-		"Raj",
-		"Sunku",
-		"Raj",
-		"rsunku@ucsd.edu",
-		["jtn018@ucsd.edu"],
-		"alal@ucsd.edu",
-		"gary"
-	),
-    "r3hu@ucsd.edu": Mentee(
-		"Rena",
-		"Hu",
-		"Rena",
-		"r3hu@ucsd.edu",
-		["zludena@ucsd.edu"],
-		"e3brooks@ucsd.edu",
-		"gary"
-	),
-    "rkafle@ucsd.edu": Mentee(
-		"Richa",
-		"Kafle",
-		"Richa",
-		"rkafle@ucsd.edu",
-		["omedinajr@ucsd.edu"],
-		"hgrehm@ucsd.edu",
-		"curt"
-	),
-    "ryhung@ucsd.edu": Mentee(
-		"Ryan",
-		"Hung",
-		"Ryan",
-		"ryhung@ucsd.edu",
-		["spkeane@ucsd.edu"],
-		"jdcross@ucsd.edu",
-		"curt"
-	),
-    "salucio@ucsd.edu": Mentee(
-		"Samantha",
-		"Lucio",
-		"Samantha",
-		"salucio@ucsd.edu",
-		["adm008@ucsd.edu"],
-		"hgrehm@ucsd.edu",
-		"curt"
-	),
-    "sprestrelski@ucsd.edu": Mentee(
-		"Samantha",
-		"Prestrelski",
-		"Samantha",
-		"sprestrelski@ucsd.edu",
-		["v2bui@ucsd.edu"],
-		"jktran@ucsd.edu",
-		"curt"
-	),
-    "sil045@ucsd.edu": Mentee(
-		"Sizhe",
-		"Li",
-		"Steven",
-		"sil045@ucsd.edu",
-		["twchu@ucsd.edu"],
-		"jdcross@ucsd.edu",
-		"curt"
-	),
-    "spkeane@ucsd.edu": Mentee(
-		"Stefan",
-		"Keane",
-		"Stefan",
-		"spkeane@ucsd.edu",
-		["ryhung@ucsd.edu"],
-		"jdcross@ucsd.edu",
-		"curt"
-	),
-    "tkn003@ucsd.edu": Mentee(
-		"Thoa",
-		"Nguyen",
-		"Thoa",
-		"tkn003@ucsd.edu",
-		["arh003@ucsd.edu"],
-		"ygupta@ucsd.edu",
-		"gary"
-	),
-    "twchu@ucsd.edu": Mentee(
-		"Timothy",
-		"Chu",
-		"Timothy",
-		"twchu@ucsd.edu",
-		["sil045@ucsd.edu"],
-		"jdcross@ucsd.edu",
-		"curt"
-	),
-    "tlmeyers@ucsd.edu": Mentee(
-		"Tyler",
-		"Meyers",
-		"Tyler",
-		"tlmeyers@ucsd.edu",
-		["nseyoum@ucsd.edu"],
-		"miivanov@ucsd.edu",
-		"curt"
-	),
-    "unaik@ucsd.edu": Mentee(
-		"Uma",
-		"Naik",
-		"Uma",
-		"unaik@ucsd.edu",
-		["pndang@ucsd.edu"],
-		"jjdrisco@ucsd.edu",
-		"niema"
-	),
-    "vvenkatesh@ucsd.edu": Mentee(
-		"Vikram",
-		"Venkatesh",
-		"Vikram",
-		"vvenkatesh@ucsd.edu",
-		["marquerupa@ucsd.edu"],
-		"jftruong@ucsd.edu",
-		"niema"
-	),
-    "v2bui@ucsd.edu": Mentee(
-		"Vuong",
-		"Bui",
-		"Vuong",
-		"v2bui@ucsd.edu",
-		["sprestrelski@ucsd.edu"],
-		"jktran@ucsd.edu",
-		"curt"
-	),
-    "zludena@ucsd.edu": Mentee(
-		"Zoe",
-		"Ludena",
-		"Zoe",
-		"zludena@ucsd.edu",
-		["r3hu@ucsd.edu"],
-		"e3brooks@ucsd.edu",
-		"gary"
-	),
+	)
 }
 
 # mentors is the map from mentors' email to their info.
-mentors = {
-    "alal@ucsd.edu": Mentor("Akshat", "Lal", "Akshat", "alal@ucsd.edu"),
-    "dam001@ucsd.edu": Mentor("Diego", "Martinez", "Diego", "dam001@ucsd.edu"),
-    "e3brooks@ucsd.edu": Mentor("Elisa", "Brooks", "Elisa", "e3brooks@ucsd.edu"),
-    "hgrehm@ucsd.edu": Mentor("Hannah", "Grehm", "Hannah", "hgrehm@ucsd.edu"),
-    "hluu@ucsd.edu": Mentor("Henry", "Luu", "Henry", "hluu@ucsd.edu"),
-    "hxiao@ucsd.edu": Mentor("Henry", "Xiao", "Henry", "hxiao@ucsd.edu"),
-    "jftruong@ucsd.edu": Mentor("Jenelle", "Truong", "Jenelle", "jftruong@ucsd.edu"),
-    "jjdrisco@ucsd.edu": Mentor("John", "Driscoll", "John", "jjdrisco@ucsd.edu"),
-    "jktran@ucsd.edu": Mentor("Jonny", "Tran", "Jonny", "jktran@ucsd.edu"),
-    "jdcross@ucsd.edu": Mentor("Josh", "Cross", "Josh", "jdcross@ucsd.edu"),
-    "lmanzano@ucsd.edu": Mentor("Lindsey", "Manzano", "Lindsey", "lmanzano@ucsd.edu"),
-    "miivanov@ucsd.edu": Mentor("Michael", "Ivanov", "Michael", "miivanov@ucsd.edu"),
-    "nrejai@ucsd.edu": Mentor("Nikki", "Rejai", "Nikki", "nrejai@ucsd.edu"),
-    "phalder@ucsd.edu": Mentor("Prothit", "Halder", "Prothit", "phalder@ucsd.edu"),
-    "tyx001@ucsd.edu": Mentor("Tristin", "Xie", "Tristin", "tyx001@ucsd.edu"),
-    "yahmad@ucsd.edu": Mentor("Younus", "Ahmad", "Younus", "yahmad@ucsd.edu"),
-    "ygupta@ucsd.edu": Mentor("Yukati", "Gupta", "Yukati", "ygupta@ucsd.edu"),
-}
+'''
+Structure:
+ucsd_email: Mentor(first_name, last_name, preferred_name, ucsd_email),
+'''
+mentors = {"alal@ucsd.edu": Mentor("Akshat", "Lal", "Akshat", "alal@ucsd.edu")}
 
 
 ################
@@ -729,12 +245,12 @@ def fmt_state():
     return res
 
 @bot.command("verifyroster")
-@commands.has_role("Mentor")
+@commands.has_role(mentor_role)
 async def verify_roster(ctx):
     await ctx.send("```\n" + fmt_students() + "```")
 
 @bot.command("verifystate")
-@commands.has_role("Mentor")
+@commands.has_role(mentor_role)
 async def verify_state(ctx):
     print("```\n" + fmt_state() + "```")
 
@@ -743,7 +259,7 @@ async def verify_state(ctx):
 # ONBOARDING #
 ##############
 
-
+# TODO: Look at this code
 @bot.event
 async def on_member_join(member):
     if member.id not in state["student_map"]:
@@ -752,7 +268,7 @@ async def on_member_join(member):
 
 # for testing
 @bot.command(name="verify")
-#@commands.has_role("Mentor")
+#@commands.has_role(mentor_role)
 async def testjoin(ctx):
     if ctx.message.author.id not in state["student_map"]:
         await join(ctx.message.author)
@@ -914,7 +430,7 @@ async def init_roles(member):
     m = s.mentor(mentors).first if s.mentor_email is not None else None
 
     # Make the student a Mentee
-    await member.add_roles(get(member.guild.roles, name="Mentee"))
+    await member.add_roles(get(member.guild.roles, name=mentee_role))
 
     # We need to create two roles:
     # pair-{min(s, p)}-{max(s, p)}
@@ -935,10 +451,10 @@ async def init_roles(member):
         nc = await member.guild.create_voice_channel(pair_name, bitrate=64000, user_limit=0, category=labs)
         await nc.set_permissions(member.guild.default_role, view_channel=False)
         await nc.set_permissions(
-            get(member.guild.roles, name="Professor"), view_channel=True
+            get(member.guild.roles, name=professor_role), view_channel=True
         )
         await nc.set_permissions(
-            get(member.guild.roles, name="Mentor"), view_channel=True
+            get(member.guild.roles, name=mentor_role), view_channel=True
         )
         await nc.set_permissions(pair_role, view_channel=True)
 
@@ -961,10 +477,10 @@ async def init_roles(member):
             nc = await member.guild.create_voice_channel(mentor_name, bitrate=64000, user_limit=0, category=mentor_cat)
             await nc.set_permissions(member.guild.default_role, view_channel=False)
             await nc.set_permissions(
-                get(member.guild.roles, name="Professor"), view_channel=True
+                get(member.guild.roles, name=professor_role), view_channel=True
             )
             await nc.set_permissions(
-                get(member.guild.roles, name="Mentor"), view_channel=True
+                get(member.guild.roles, name=mentor_role), view_channel=True
             )
             await nc.set_permissions(mentor_role, view_channel=True)
 
@@ -1142,21 +658,21 @@ async def add_ticket(creator, description, admin_roles):
     
 
 @bot.command(name="onduty")
-@commands.has_role("Mentor")
+@commands.has_role(mentor_role)
 async def on_duty(ctx):
     duty_role = get(ctx.author.guild.roles, name="On Duty")
     await ctx.author.add_roles(duty_role)
 
 
 @bot.command(name="offduty")
-@commands.has_role("Mentor")
+@commands.has_role(mentor_role)
 async def off_duty(ctx):
     duty_role = get(ctx.author.guild.roles, name="On Duty")
     await ctx.author.remove_roles(duty_role)
 
 
 @bot.command(name="cleartickets")
-@commands.has_role("Mentor")
+@commands.has_role(mentor_role)
 async def clear_tickets(ctx):
     state["tickets"] = []
 
@@ -1181,7 +697,7 @@ def breakout_prefix(ident):
 
 @commands.check(in_voice_channel)
 @bot.command(name="recall")
-@commands.has_role("Mentor")
+@commands.has_role(mentor_role)
 async def recall(ctx, ident=None):
     # We move everyone to the voice channel of the person who invoked recall
     for member in ctx.guild.members:
@@ -1191,7 +707,7 @@ async def recall(ctx, ident=None):
 
 @commands.check(in_voice_channel)
 @bot.command(name="bkclose")
-@commands.has_role("Mentor")
+@commands.has_role(mentor_role)
 async def bkclose(ctx, ident=None):
     # For each matching breakout channel:
     prefix = breakout_prefix(ident)
@@ -1208,7 +724,7 @@ async def bkclose(ctx, ident=None):
 
 @commands.check(in_voice_channel)
 @bot.command(name="breakout")
-@commands.has_role("Mentor")
+@commands.has_role(mentor_role)
 async def breakout(ctx, arg=None):
     # arg is either a category (mentor, pair, etc.) or a number, denoting the max size of the randomly assigned breakout rooms
     if arg is None:
@@ -1231,8 +747,8 @@ async def breakout(ctx, arg=None):
         members = ctx.author.voice.channel.members
         random.shuffle(members)
 
-        mentees = [x for x in members if has_role(ctx.guild, x, name="Mentee")]
-        admins = [x for x in members if not has_role(ctx.guild, x, name="Mentee")]
+        mentees = [x for x in members if has_role(ctx.guild, x, name=mentee_role)]
+        admins = [x for x in members if not has_role(ctx.guild, x, name=mentee_role)]
 
         split_mentees = list(chunks(mentees, groups))
         split_admins = list(chunks(admins, groups))
@@ -1420,8 +936,8 @@ async def on_message(message):
     if message.author.id != bot.user.id:
         if message.channel.id == channel_need_help:
             admin_roles = [
-                get(message.guild.roles, name="Mentor"),
-                get(message.guild.roles, name="Professor"),
+                get(message.guild.roles, name=mentor_role),
+                get(message.guild.roles, name=professor_role),
             ]
             if id_not_in_q(message.author.id):
                 await add_ticket(message.author, message.content, admin_roles)
@@ -1434,8 +950,8 @@ async def process_tickets(message):
     if message.author.id != bot.user.id:
         if message.channel.id == channel_need_help:
             admin_roles = [
-                get(message.guild.roles, name="Mentor"),
-                get(message.guild.roles, name="Professor"),
+                get(message.guild.roles, name=mentor_role),
+                get(message.guild.roles, name=professor_role),
             ]
             if id_not_in_q(message.author.id):
                 await add_ticket(message.author, message.content, admin_roles)
@@ -1452,7 +968,7 @@ async def wide(ctx):
             await ctx.send(file=discord.File(buf, "wide.png"))
 
 @bot.command("presence")
-@commands.has_role("Mentor")
+@commands.has_role(mentor_role)
 async def presence(ctx, *args):
     status = args[-1]
     if hasattr(discord.Status, status):
@@ -1486,7 +1002,7 @@ When I see you again...
 
 # Purge all messages from a channel
 @bot.command(name="purge")
-@commands.has_role("Mentor")
+@commands.has_role(mentor_role)
 async def purge(ctx, limit=10):
     if limit == None or int(limit) > 50:
         limit = 50
@@ -1494,7 +1010,7 @@ async def purge(ctx, limit=10):
 
 
 @bot.command(name="rmuser")
-@commands.has_role("Mentor")
+@commands.has_role(mentor_role)
 async def rm_user(ctx, uid):
     uid = int(uid)
     state["student_map"].pop(uid, None)
@@ -1505,7 +1021,7 @@ async def rm_user(ctx, uid):
 
 
 @bot.command(name="adduser")
-@commands.has_role("Mentor")
+@commands.has_role(mentor_role)
 async def add_user(ctx, uid, email):
     uid = int(uid)
     state["student_map"][uid] = email
@@ -1516,14 +1032,14 @@ async def add_user(ctx, uid, email):
 
 
 @bot.command(name="userinfo")
-@commands.has_role("Mentor")
+@commands.has_role(mentor_role)
 async def user_info(ctx, uid):
     for k, v in state["student_map"].items():
         if str(k) == uid or v == uid:
             s = students[state["student_map"][int(uid)]] if str(k) == uid else students[v]
 
             embed = discord.Embed(title=f"{s.first} {s.last} ({s.preferred})")
-            embed.add_field(name="Mentor", value=s.mentor(mentors).first)
+            embed.add_field(name=mentor_role, value=s.mentor(mentors).first)
             embed.add_field(name="Email", value=s.email)
             embed.add_field(name="Instr", value=s.instr)
             embed.add_field(name="Group ident", value=s.group_ident(students))
@@ -1539,7 +1055,7 @@ async def user_info(ctx, uid):
 
 
 @bot.command(name="syncmentorchannels")
-@commands.has_role("Mentor")
+@commands.has_role(mentor_role)
 async def sync_mentor_channels(ctx):
     for channel in ctx.guild.voice_channels:
         if channel.name.startswith("mentor--"):
@@ -1553,17 +1069,17 @@ async def sync_mentor_channels(ctx):
                 nc = await ctx.guild.create_voice_channel(role.name, bitrate=64000, user_limit=0, category=mentors)
                 await nc.set_permissions(ctx.guild.default_role, view_channel=False)
                 await nc.set_permissions(
-                    get(ctx.guild.roles, name="Professor"), view_channel=True
+                    get(ctx.guild.roles, name=professor_role), view_channel=True
                 )
                 await nc.set_permissions(
-                    get(ctx.guild.roles, name="Mentor"), view_channel=True
+                    get(ctx.guild.roles, name=mentor_role), view_channel=True
                 )
                 await nc.set_permissions(role, view_channel=True)
 
     print("sync complete")
 
 @bot.command(name="syncroles")
-@commands.has_role("Mentor")
+@commands.has_role(mentor_role)
 async def sync_roles(ctx):
     # We first purge all roles
     for role in ctx.guild.roles:
@@ -1579,7 +1095,7 @@ async def sync_roles(ctx):
             await channel.delete()
 
     # Remove Mentee role
-    role = get(ctx.guild.roles, name="Mentee")
+    role = get(ctx.guild.roles, name=mentee_role)
     for m in ctx.guild.members:
         try:
             await m.remove_roles(role)
@@ -1596,7 +1112,7 @@ async def sync_roles(ctx):
 
 
 @bot.command(name="purgeroles")
-@commands.has_role("Mentor")
+@commands.has_role(mentor_role)
 async def purge_roles(ctx):
     for role in ctx.guild.roles:
         if role.name.startswith("pair--") or role.name.startswith("mentor--"):
@@ -1614,7 +1130,7 @@ async def purge_roles(ctx):
     state["student_map"] = {}
 
     # Remove Mentee role
-    role_names = ("Mentee",)
+    role_names = (mentee_role,)
     roles = tuple(get(ctx.guild.roles, name=n) for n in role_names)
     for m in ctx.guild.members:
         try:
@@ -1624,7 +1140,7 @@ async def purge_roles(ctx):
 
 
 @bot.command(name="shutdown")
-@commands.has_role("Mentor")
+@commands.has_role(mentor_role)
 async def shutdown(ctx):
     await bot.close()
 
