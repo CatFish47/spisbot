@@ -85,7 +85,7 @@ class Mentor:
 # CONSTS #
 ##########
 
-channel_announcements = 864372838844727326
+channel_announcements = 1003017006162907246
 channel_mentor_queue = 869402812189118515
 channel_need_help = 869402827271856198
 category_breakout = 869403135070838845
@@ -760,7 +760,7 @@ async def testjoin(ctx):
 
 async def join(member):
     intro = """
-Yo yo yo! Welcome to SPIS 2021. I'm **SPISBot**, an automated bot here to help manage and moderate the SPIS 2022 Discord!
+Yo yo yo! Welcome to SPIS 2022. I'm **SPISBot**, an automated bot here to help manage and moderate the SPIS 2022 Discord!
 
 For now, I'm here to help welcome you to the SPIS 2022 Discord server. You'll notice that as of right now, you can't type in any of the channels. Don't worry; this is so that we can protect ourselves against random people from joining our server, and so that we can verify who you are before you can talk in the Discord. Before you can get started and hang out with everyone else, I need to know who you are first.
 
@@ -881,10 +881,11 @@ Now that we've verified who you are, you now have access to all of the text and 
 
 For now, you should read through the informational text channels we have on the server:
 
-- <#864372817867964446> has more information on what each of the channels in the Discord server is for.
-- <#864372838844727326> contains SPIS-wide announcements regarding assignment deadlines and other urgent info.
+- <#1003016905289891921> has more information on what each of the channels in the Discord server is for.
+- <#1003017006162907246> contains SPIS-wide announcements regarding assignment deadlines and other urgent info.
+- <#1003020435442642995> is the go-to channel for any questions, urgent or otherwise, that you need answered.
 
-Beyond that, all there is to do now is to **jump in and start getting to know your mentors and your fellow mentees!** Our general text chat for hanging out is (appropriately) called <#868552432102285373>, so hop on and introduce yourself!
+Beyond that, all there is to do now is to **jump in and start getting to know your mentors and your fellow mentees!** Our general text chat for hanging out is (appropriately) called <#1003018705606803677>, so hop on and introduce yourself!
 
 Have fun, and welcome to SPIS!
 """

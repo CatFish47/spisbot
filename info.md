@@ -1,5 +1,5 @@
 # Info for future years
-> By Jeannie for SPIS 2022
+> By Jeannie and Grant for SPIS 2022
 
 > OG code is not mine, so I'm assuming a lot of functions.
 
