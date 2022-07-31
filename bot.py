@@ -256,7 +256,7 @@ students = {
     "hisayama@ucsd.edu": Mentee(
 		"Hikaru",
 		"Isayama",
-		"Hikaru",
+		"Sean",
 		"hisayama@ucsd.edu",
 		["bscheerger@ucsd.edu"],
 		["adhami@ucsd.edu"],
@@ -427,7 +427,7 @@ students = {
     "yvtang@ucsd.edu": Mentee(
 		"Ying",
 		"Tang",
-		"Ying",
+		"Vicky",
 		"yvtang@ucsd.edu",
 		["syl010@ucsd.edu"],
 		["rkafle@ucsd.edu"],
@@ -472,7 +472,7 @@ students = {
     "g7xu@ucsd.edu": Mentee(
 		"Guoxuan",
 		"Xu",
-		"Guoxuan",
+		"Jason",
 		"g7xu@ucsd.edu",
 		["bmdunn@ucsd.edu"],
 		["nnazeem@ucsd.edu"],
