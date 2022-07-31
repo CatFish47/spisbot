@@ -38,14 +38,14 @@ TicketState = Enum("TicketState", "TODO PROG DONE")
 
 class Mentee:
     def __init__(
-        self, first, last, preferred, email, partner_emails, mentor_email, instr
+        self, first, last, preferred, email, partner_emails, mentor_emails, instr
     ):
         self.first = first
         self.last = last
         self.preferred = preferred
         self.email = email
         self.partner_emails = partner_emails
-        self.mentor_email = mentor_email
+        self.mentor_emails = mentor_emails
         self.instr = instr
 
     # Return the mentee's unique identifier - the part before their @ucsd.edu
@@ -62,9 +62,8 @@ class Mentee:
     def partners(self, students):
         return [students[x] for x in self.partner_emails]
 
-    def mentor(self, mentors):
-        return mentors[self.mentor_email]
-
+    def mentors(self, mentors):
+        return [mentors[x] for x in self.mentor_emails]
 
 class Mentor:
     def __init__(self, first, last, preferred, email):
@@ -105,7 +104,7 @@ ucsd_email: Mentee(
     preferred_name,
     ucsd_email,
     [partner_email],
-    mentor_email,
+    [mentor_email],
     professor_name
 ),
 '''
@@ -115,495 +114,486 @@ students = {
 		"Jung",
 		"Haesol",
 		"haj008@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["anh034@ucsd.edu"],
+		["gxcheng@ucsd.edu"],
+		"phill"
 	),
     "chn021@ucsd.edu": Mentee(
 		"Chuong",
 		"Nguyen",
 		"Chuone",
 		"chn021@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["ryl001@ucsd.edu"],
+		["rurioste@ucsd.edu"],
+		"phill"
 	),
     "nxwang@ucsd.edu": Mentee(
 		"Nathan",
 		"Wang",
 		"Nathan",
 		"nxwang@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["jqxiang@ucsd.edu"],
+		["j7bui@ucsd.edu"],
+		"curt"
 	),
     "ezxiong@ucsd.edu": Mentee(
 		"Eddie",
 		"Xiong",
 		"Eddie",
 		"ezxiong@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["mazab@ucsd.edu"],
+		["bchester@ucsd.edu", "jsimpauco@ucsd.edu"],
+		"niema"
 	),
     "szhai@ucsd.edu": Mentee(
 		"Steven",
 		"Zhai",
 		"Steven",
 		"szhai@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["e7han@ucsd.edu"],
+		["a1wang@ucsd.edu"],
+		"niema"
 	),
     "m6chu@ucsd.edu": Mentee(
 		"Michael",
 		"Chu",
 		"Michael",
 		"m6chu@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["adapsay@ucsd.edu"],
+		["adhami@ucsd.edu"],
+		"phill"
 	),
     "daji@ucsd.edu": Mentee(
 		"Daniel",
 		"Ji",
 		"Daniel",
 		"daji@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["aimai@ucsd.edu"],
+		["nnazeem@ucsd.edu"],
+		"niema"
 	),
     "omiller@ucsd.edu": Mentee(
 		"Owen",
 		"Miller",
 		"Owen",
 		"omiller@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["cjfan@ucsd.edu"],
+		["j7bui@ucsd.edu"],
+		"curt"
 	),
     "nipillai@ucsd.edu": Mentee(
 		"Nitya",
 		"Pillai",
 		"Nitya",
 		"nipillai@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["mekumar@ucsd.edu"],
+		["ehcho@ucsd.edu"],
+		"curt"
 	),
     "jqxiang@ucsd.edu": Mentee(
 		"Jonathan",
 		"Xiang",
 		"Jonathan",
 		"jqxiang@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["nxwang@ucsd.edu"],
+		["j7bui@ucsd.edu"],
+		"curt"
 	),
     "natrinh@ucsd.edu": Mentee( # nancy?
 		"Warren",
 		"Trinh",
 		"Warren",
 		"natrinh@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["bryoon@ucsd.edu"],
+		["sil045@ucsd.edu"],
+		"phill"
 	),
     "anh034@ucsd.edu": Mentee(
 		"Andy",
 		"Ho",
 		"Andy",
 		"anh034@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["haj008@ucsd.edu"],
+		["gxcheng@ucsd.edu"],
+		"phill"
 	),
     "dwumendez@ucsd.edu": Mentee(
 		"Denise",
 		"Wu-Mendez",
 		"Denise",
 		"dwumendez@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["jeemi@ucsd.edu"],
+		["nseyoum@ucsd.edu"],
+		"curt"
 	),
     "p2do@ucsd.edu": Mentee(
 		"Phuc",
 		"Do",
 		"Kevin",
 		"p2do@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["avn011@ucsd.edu"],
+		["ehcho@ucsd.edu"],
+		"curt"
 	),
     "mazab@ucsd.edu": Mentee(
 		"Mohammed",
 		"Azab",
 		"Mohammed",
 		"mazab@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["ezxiong@ucsd.edu"],
+		["bchester@ucsd.edu", "jsimpauco@ucsd.edu"],
+		"niema"
 	),
     "tzchuang@ucsd.edu": Mentee(
 		"Tzy-Harn",
 		"Chuang",
 		"Serena",
 		"tzchuang@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["dregmi@ucsd.edu"],
+		["rkafle@ucsd.edu"],
+		"phill"
 	),
     "hisayama@ucsd.edu": Mentee(
 		"Hikaru",
 		"Isayama",
 		"Hikaru",
 		"hisayama@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["bscheerger@ucsd.edu"],
+		["adhami@ucsd.edu"],
+		"phill"
 	),
     "aimai@ucsd.edu": Mentee(
 		"Aidan",
 		"Mai",
 		"Aidan",
 		"aimai@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["daji@ucsd.edu"],
+		["nnazeem@ucsd.edu"],
+		"niema"
 	),
     "adapsay@ucsd.edu": Mentee(
 		"Adrian",
 		"Apsay",
 		"Adrian",
 		"adapsay@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
-	),
-    "adapsay@ucsd.edu": Mentee(
-		"Adrian",
-		"Apsay",
-		"Adrian",
-		"adapsay@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["m6chu@ucsd.edu"],
+		["adhami@ucsd.edu"],
+		"phill"
 	),
     "kkeertipati@ucsd.edu": Mentee(
 		"Kiran",
 		"Keertipati",
 		"Kiran",
 		"kkeertipati@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["msoares@ucsd.edu"],
+		["jlk004@ucsd.edu"],
+		"niema"
 	),
     "bryoon@ucsd.edu": Mentee(
 		"Brandon",
 		"Yoon",
 		"Brandon",
 		"bryoon@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["natrinh@ucsd.edu"],
+		["sil045@ucsd.edu"],
+		"phill"
 	),
     "arsureshkumar@ucsd.edu": Mentee(
 		"Arjun",
 		"Suresh Kumar",
 		"Arjun",
 		"arsureshkumar@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["jscrook@ucsd.edu"],
+		["rurioste@ucsd.edu"],
+		"phill"
 	),
     "a4padilla@ucsd.edu": Mentee(
 		"Ashley",
 		"Padilla",
 		"Ashley",
 		"a4padilla@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["averthein@ucsd.edu"],
+		["jlk004@ucsd.edu"],
+		"niema"
 	),
     "zroland@ucsd.edu": Mentee(
 		"Zack",
 		"Roland",
 		"Zack",
 		"zroland@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["emirandaramirez@ucsd.edu"],
+		["bchester@ucsd.edu", "jsimpauco@ucsd.edu"],
+		"niema"
 	),
     "ruchandrupatla@ucsd.edu": Mentee(
 		"Rushil",
 		"Chandrupatla",
 		"Rushil",
 		"ruchandrupatla@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["ryding@ucsd.edu"],
+		["aawelch@ucsd.edu"],
+		"curt"
 	),
     "ryding@ucsd.edu": Mentee(
 		"Ryan",
 		"Ding",
-		"Ryan",
+		"Ryan D",
 		"ryding@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["ruchandrupatla@ucsd.edu"],
+		["aawelch@ucsd.edu"],
+		"curt"
 	),
     "bmdunn@ucsd.edu": Mentee(
 		"Brenton",
 		"Dunn",
 		"Brenton",
 		"bmdunn@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["g7xu@ucsd.edu"],
+		["nnazeem@ucsd.edu"],
+		"niema"
 	),
     "jeemi@ucsd.edu": Mentee(
 		"Jensen",
 		"Emi",
 		"Jensen",
 		"jeemi@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["dwumendez@ucsd.edu"],
+		["nseyoum@ucsd.edu"],
+		"curt"
 	),
     "etflores@ucsd.edu": Mentee(
 		"Ethan",
 		"Flores",
-		"Ethan",
+		"Ethan F",
 		"etflores@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["gvidra@ucsd.edu"],
+		["bchester@ucsd.edu", "jsimpauco@ucsd.edu"],
+		"niema"
 	),
     "mekumar@ucsd.edu": Mentee(
 		"Megha",
 		"Kumar",
 		"Megha",
 		"mekumar@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["nipillai@ucsd.edu"],
+		["ehcho@ucsd.edu"],
+		"curt"
 	),
     "ril006@ucsd.edu": Mentee(
 		"Richard",
 		"Li",
 		"Richard",
 		"ril006@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["igross@ucsd.edu"],
+		["sil045@ucsd.edu"],
+		"phill"
 	),
     "syl010@ucsd.edu": Mentee(
 		"Stephanie",
 		"Li",
 		"Stephanie",
 		"syl010@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["yvtang@ucsd.edu"],
+		["rkafle@ucsd.edu"],
+		"phill"
 	),
     "rpanaparambil@ucsd.edu": Mentee(
 		"Ravina",
 		"Panaparambil",
 		"Ravina",
 		"rpanaparambil@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["vit008@ucsd.edu"],
+		["nseyoum@ucsd.edu"],
+		"curt"
 	),
     "dregmi@ucsd.edu": Mentee(
 		"Drishti",
 		"Regmi",
 		"Drishti",
 		"dregmi@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["tzchuang@ucsd.edu"],
+		["rkafle@ucsd.edu"],
+		"phill"
 	),
     "bscheerger@ucsd.edu": Mentee(
 		"Benjamin",
 		"Scheerger",
 		"Benjamin",
 		"bscheerger@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["hisayama@ucsd.edu"],
+		["adhami@ucsd.edu"],
+		"phill"
 	),
     "yvtang@ucsd.edu": Mentee(
 		"Ying",
 		"Tang",
 		"Ying",
 		"yvtang@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["syl010@ucsd.edu"],
+		["rkafle@ucsd.edu"],
+		"phill"
 	),
     "gvidra@ucsd.edu": Mentee(
 		"Gavriel",
 		"Vidra",
 		"Gavi",
 		"gvidra@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["etflores@ucsd.edu"],
+		["bchester@ucsd.edu", "jsimpauco@ucsd.edu"],
+		"niema"
 	),
     "emirandaramirez@ucsd.edu": Mentee(
 		"Emerson",
 		"Miranda-Ramirez",
 		"Emerson",
 		"emirandaramirez@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["zroland@ucsd.edu"],
+		["bchester@ucsd.edu", "jsimpauco@ucsd.edu"],
+		"niema"
 	),
     "pcl004@ucsd.edu": Mentee(
 		"Peter",
 		"Lee",
 		"Peter",
 		"pcl004@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["v9sharma@ucsd.edu"],
+		"aawelch@ucsd.edu",
+		"curt"
 	),
     "jscrook@ucsd.edu": Mentee(
 		"James",
 		"Crook",
 		"James",
 		"jscrook@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["arsureshkumar@ucsd.edu"],
+		["rurioste@ucsd.edu"],
+		"phill"
 	),
     "g7xu@ucsd.edu": Mentee(
 		"Guoxuan",
 		"Xu",
 		"Guoxuan",
 		"g7xu@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["bmdunn@ucsd.edu"],
+		["nnazeem@ucsd.edu"],
+		"niema"
 	),
     "tot005@ucsd.edu": Mentee(
 		"Tony",
 		"Tran",
 		"Tony",
 		"tot005@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["idelarosa@ucsd.edu"],
+		"gxcheng@ucsd.edu",
+		"phil"
 	),
     "cjfan@ucsd.edu": Mentee(
 		"Connor",
 		"Fan",
 		"Connor",
 		"cjfan@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["omiller@ucsd.edu"],
+		["j7bui@ucsd.edu"],
+		"curt"
 	),
     "avn011@ucsd.edu": Mentee(
 		"Addy",
 		"Ngo",
 		"Addy",
 		"avn011@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["p2do@ucsd.edu"],
+		["ehcho@ucsd.edu"],
+		"curt"
 	),
     "msoares@ucsd.edu": Mentee(
 		"Madeline",
 		"Soares",
 		"Madeline",
 		"msoares@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["kkeertipati@ucsd.edu"],
+		["jlk004@ucsd.edu"],
+		"niema"
 	),
     "vit008@ucsd.edu": Mentee(
 		"Vivian",
 		"Tran",
 		"Vivian",
 		"vit008@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["rpanaparambil@ucsd.edu"],
+		["nseyoum@ucsd.edu"],
+		"curt"
 	),
     "yalbaker@ucsd.edu": Mentee(
 		"Yaser",
 		"Albaker",
 		"Yaser",
 		"yalbaker@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["empangan@ucsd.edu"],
+		"a1wang@ucsd.edu",
+		"niema"
 	),
     "igross@ucsd.edu": Mentee(
 		"Ian",
 		"Gross",
 		"Ian",
 		"igross@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["ril006@ucsd.edu"],
+		["sil045@ucsd.edu"],
+		"phill"
 	),
     "v9sharma@ucsd.edu": Mentee(
 		"Vinayak",
 		"Sharma",
 		"Vinayak",
 		"v9sharma@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["pcl004@ucsd.edu"],
+		"aawelch@ucsd.edu",
+		"curt"
 	),
     "averthein@ucsd.edu": Mentee(
 		"Anastasiya",
 		"Verthein",
 		"Anastasiya",
 		"averthein@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["a4padilla@ucsd.edu"],
+		["jlk004@ucsd.edu"],
+		"niema"
 	),
     "ryl001@ucsd.edu": Mentee(
 		"Ryan",
 		"Liu",
-		"Ryan",
+		"Ryan L",
 		"ryl001@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["chn021@ucsd.edu"],
+		["rurioste@ucsd.edu"],
+		"phill"
 	),
     "e7han@ucsd.edu": Mentee(
 		"Ethan",
 		"Han",
-		"Ethan",
+		"Ethan H",
 		"e7han@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["szhai@ucsd.edu"],
+		["a1wang@ucsd.edu"],
+		"niema"
 	),
     "empangan@ucsd.edu": Mentee(
 		"Emmett",
 		"Pangan",
 		"Emmett",
 		"empangan@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["yalbaker@ucsd.edu"],
+		"a1wang@ucsd.edu",
+		"niema"
 	),
     "idelarosa@ucsd.edu": Mentee(
 		"Isaiah",
 		"De La Rosa",
 		"Isaiah",
 		"idelarosa@ucsd.edu",
-		["x@ucsd.edu"],
-		"x@ucsd.edu",
-		"x"
+		["tot005@ucsd.edu"],
+		"gxcheng@ucsd.edu",
+		"phil"
 	),
 
 }
