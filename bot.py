@@ -768,6 +768,8 @@ async def testjoin(ctx):
 
 
 async def join(member):
+    print("Verifying student...")
+
     intro = """
 Yo yo yo! Welcome to SPIS 2022. I'm **SPISBot**, an automated bot here to help manage and moderate the SPIS 2022 Discord!
 
@@ -871,6 +873,7 @@ _If the preferred name is incorrect, just let your mentor know and we'll fix it 
 
     if button_id == "confirm_identity":
         # Confirmed!
+        print(f"Verified {s.first} {s.last}!")
 
         # We first initialize their nickname
         # try so that it doesn't panic if we can't change nick (which won't
