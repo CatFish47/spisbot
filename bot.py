@@ -920,7 +920,8 @@ async def init_roles(member):
     n = s.group_ident(students)
 
     # Get their mentor, if exists
-    m = s.mentor(mentors).first if s.mentor_email is not None else None
+    m = "-".join([mentee.first for mentee in s.mentors(mentors)]) if len(s.mentor_emails) != 0 else None
+    
 
     # Make the student a Mentee
     await member.add_roles(get(member.guild.roles, name=mentee_role_name))
