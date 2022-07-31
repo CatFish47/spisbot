@@ -690,8 +690,10 @@ class Bot(commands.Bot):
         state.close()
         await super().close()
 
+intents = discord.Intents.default()
+intents.members = True
 
-bot = Bot("!")
+bot = Bot("!", intents=intents)
 bot.remove_command("help")
 
 
@@ -1615,6 +1617,8 @@ async def sync_roles(ctx):
 @bot.command(name="purgeroles")
 @commands.has_role(mentor_role_name)
 async def purge_roles(ctx):
+    print("Purging all roles")
+
     for role in ctx.guild.roles:
         if role.name.startswith("pair--") or role.name.startswith("mentor--"):
             await role.delete()
