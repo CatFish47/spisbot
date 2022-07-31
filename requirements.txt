@@ -1,6 +1,5 @@
 recordclass
 python-dotenv
-discord.py[voice]
 discord.py-message-components
 Pillow
 requests
