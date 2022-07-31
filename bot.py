@@ -888,10 +888,10 @@ async def start_poll(ctx, name=None, *args):
 
 @bot.command(name="help")
 async def help(ctx):
-    footer = "spisbot 2021-07-26 | https://github.com/TheCrossBoy/spisbot"
+    footer = "spisbot 2022-07-30 | https://github.com/CatFish47/spisbot"
 
     desc = """
-spisbot is the custom-made robot designed to help manage the SPIS 2021 Discord server. While you can send me commands to make me do things, I'm also always sitting in the background to help welcome people to the SPIS server and manage queue tickets.
+spisbot is the custom-made robot designed to help manage the SPIS 2022 Discord server. While you can send me commands to make me do things, I'm also always sitting in the background to help welcome people to the SPIS server and manage queue tickets.
 
 **General commands**
 
@@ -905,7 +905,7 @@ spisbot is the custom-made robot designed to help manage the SPIS 2021 Discord s
 - `!offduty`: add the "Off Duty" role to show that you're off duty.
 - `!breakout n`: create `n` breakout rooms, for example, `!breakout 2` creates `2` breakout rooms.
 - `!breakout type`: create breakout rooms based on type specified. `mentor` divides based on Mentor and `prof` divides based on assigned Professor. 
-- `!bkclose [ident]`: close breakout rooms with identifier `ident` if specified; closes all breakout roms otherwise
+- `!bkclose [ident]`: close breakout rooms with identifier `ident` if specified; closes all breakout rooms otherwise
 - `!recall`: move all people in a Voice Channel to your current Voice Channel.
 
 If you're trying to call any other commands, keep this in mind:
