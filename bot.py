@@ -553,7 +553,7 @@ students = {
     "averthein@ucsd.edu": Mentee(
 		"Anastasiya",
 		"Verthein",
-		"Anastasiya",
+		"Nata",
 		"averthein@ucsd.edu",
 		["a4padilla@ucsd.edu"],
 		["jlk004@ucsd.edu"],
