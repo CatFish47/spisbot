@@ -14,3 +14,7 @@
         - Need: email, name, partner, mentor, cohort leader (professor)
         - Get using Github(?)
     - Mentor roster
+
+
+- Get the bot to run!
+    - Heroku?

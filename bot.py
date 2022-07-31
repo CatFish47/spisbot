@@ -135,7 +135,25 @@ students = {
 Structure:
 ucsd_email: Mentor(first_name, last_name, preferred_name, ucsd_email),
 '''
-mentors = {"gxcheng@ucsd.edu": Mentor("Grant", "Cheng", "Grant", "gxcheng@ucsd.edu")}
+mentors = {
+    "aasapra@ucsd.edu": Mentor("Aammya", "Sapra", "Aammya", "aasapra@ucsd.edu"),
+    "aawelch@ucsd.edu": Mentor("Alessia", "Welch", "Alessia", "aawelch@ucsd.edu"),
+    "adhami@ucsd.edu": Mentor("Amir", "Dhami", "Amir", "adhami@ucsd.edu"),
+    "a1wang@ucsd.edu": Mentor("Anthony", "Wang", "Anthony", "a1wang@ucsd.edu"),
+    "bchester@ucsd.edu": Mentor("Bradley", "Chester", "Bradley", "bchester@ucsd.edu"),
+    "cachiu@ucsd.edu": Mentor("Aerin", "Chiu", "Aerin", "cachiu@ucsd.edu"),
+    "ehcho@ucsd.edu": Mentor("Esther", "Cho", "Esther", "ehcho@ucsd.edu"),
+    "gxcheng@ucsd.edu": Mentor("Grant", "Cheng", "Grant", "gxcheng@ucsd.edu"),
+    "jjose@ucsd.edu": Mentor("Jared", "Jose", "Jared J", "jjose@ucsd.edu"),
+    "jsimpauco@ucsd.edu": Mentor("Jared", "Simpauco", "Jared S", "jsimpauco@ucsd.edu"),
+    "jlk004@ucsd.edu": Mentor("Jeannie", "Kim", "Jeannie", "jlk004@ucsd.edu"),
+    "j7bui@ucsd.edu": Mentor("Jett", "Bui", "Jett", "j7bui@ucsd.edu"),
+    "nnazeem@ucsd.edu": Mentor("Nihal", "Nazeem", "Nihal", "nnazeem@ucsd.edu"),
+    "nseyoum@ucsd.edu": Mentor("Nola", "Seyoum", "Nola", "nseyoum@ucsd.edu"),
+    "rurioste@ucsd.edu": Mentor("Raul", "Uriostegui", "Raul", "rurioste@ucsd.edu"),
+    "rkafle@ucsd.edu": Mentor("Richa", "Kafle", "Richa", "rkafle@ucsd.edu"),
+    "sil045@ucsd.edu": Mentor("Sizhe", "Li", "Steven", "sil045@ucsd.edu")
+}
 
 
 ################
