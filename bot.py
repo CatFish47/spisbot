@@ -92,9 +92,9 @@ category_breakout = 1003078148566552636
 category_lab = 1003077628623847424
 category_mentors = 1003078093205946429
 
-mentor_role = "Mentors"
-mentee_role = "Mentees"
-professor_role = "Instructors"
+mentor_role_name = "Mentors"
+mentee_role_name = "Mentees"
+professor_role_name = "Instructors"
 
 # students is a map from an email to the student info
 '''
@@ -272,12 +272,12 @@ def fmt_state():
     return res
 
 @bot.command("verifyroster")
-@commands.has_role(mentor_role)
+@commands.has_role(mentor_role_name)
 async def verify_roster(ctx):
     await ctx.send("```\n" + fmt_students() + "```")
 
 @bot.command("verifystate")
-@commands.has_role(mentor_role)
+@commands.has_role(mentor_role_name)
 async def verify_state(ctx):
     print("```\n" + fmt_state() + "```")
 
@@ -455,7 +455,7 @@ async def init_roles(member):
     m = s.mentor(mentors).first if s.mentor_email is not None else None
 
     # Make the student a Mentee
-    await member.add_roles(get(member.guild.roles, name=mentee_role))
+    await member.add_roles(get(member.guild.roles, name=mentee_role_name))
 
     # We need to create two roles:
     # pair-{min(s, p)}-{max(s, p)}
@@ -476,10 +476,10 @@ async def init_roles(member):
         nc = await member.guild.create_voice_channel(pair_name, bitrate=64000, user_limit=0, category=labs)
         await nc.set_permissions(member.guild.default_role, view_channel=False)
         await nc.set_permissions(
-            get(member.guild.roles, name=professor_role), view_channel=True
+            get(member.guild.roles, name=professor_role_name), view_channel=True
         )
         await nc.set_permissions(
-            get(member.guild.roles, name=mentor_role), view_channel=True
+            get(member.guild.roles, name=mentor_role_name), view_channel=True
         )
         await nc.set_permissions(pair_role, view_channel=True)
 
@@ -502,10 +502,10 @@ async def init_roles(member):
             nc = await member.guild.create_voice_channel(mentor_name, bitrate=64000, user_limit=0, category=mentor_cat)
             await nc.set_permissions(member.guild.default_role, view_channel=False)
             await nc.set_permissions(
-                get(member.guild.roles, name=professor_role), view_channel=True
+                get(member.guild.roles, name=professor_role_name), view_channel=True
             )
             await nc.set_permissions(
-                get(member.guild.roles, name=mentor_role), view_channel=True
+                get(member.guild.roles, name=mentor_role_name), view_channel=True
             )
             await nc.set_permissions(mentor_role, view_channel=True)
 
@@ -683,28 +683,28 @@ async def add_ticket(creator, description, admin_roles):
     
 
 @bot.command(name="onduty")
-@commands.has_role(mentor_role)
+@commands.has_role(mentor_role_name)
 async def on_duty(ctx):
     duty_role = get(ctx.author.guild.roles, name="On Duty")
     await ctx.author.add_roles(duty_role)
 
 
 @bot.command(name="offduty")
-@commands.has_role(mentor_role)
+@commands.has_role(mentor_role_name)
 async def off_duty(ctx):
     duty_role = get(ctx.author.guild.roles, name="On Duty")
     await ctx.author.remove_roles(duty_role)
 
 
 @bot.command(name="cleartickets")
-@commands.has_role(mentor_role)
+@commands.has_role(mentor_role_name)
 async def clear_tickets(ctx):
     state["tickets"] = []
 
     await bot.get_channel(channel_mentor_queue).purge()
 
 @bot.command(name="dumptickets")
-@commands.has_role(mentor_role)
+@commands.has_role(mentor_role_name)
 async def dump_tickets(ctx):
     print(state["tickets"])
 
@@ -726,7 +726,7 @@ def breakout_prefix(ident):
 
 @commands.check(in_voice_channel)
 @bot.command(name="recall")
-@commands.has_role(mentor_role)
+@commands.has_role(mentor_role_name)
 async def recall(ctx, ident=None):
     # We move everyone to the voice channel of the person who invoked recall
     for member in ctx.guild.members:
@@ -736,7 +736,7 @@ async def recall(ctx, ident=None):
 
 @commands.check(in_voice_channel)
 @bot.command(name="bkclose")
-@commands.has_role(mentor_role)
+@commands.has_role(mentor_role_name)
 async def bkclose(ctx, ident=None):
     # For each matching breakout channel:
     prefix = breakout_prefix(ident)
@@ -753,7 +753,7 @@ async def bkclose(ctx, ident=None):
 
 @commands.check(in_voice_channel)
 @bot.command(name="breakout")
-@commands.has_role(mentor_role)
+@commands.has_role(mentor_role_name)
 async def breakout(ctx, arg=None):
     # arg is either a category (mentor, pair, etc.) or a number, denoting the max size of the randomly assigned breakout rooms
     if arg is None:
@@ -776,8 +776,8 @@ async def breakout(ctx, arg=None):
         members = ctx.author.voice.channel.members
         random.shuffle(members)
 
-        mentees = [x for x in members if has_role(ctx.guild, x, name=mentee_role)]
-        admins = [x for x in members if not has_role(ctx.guild, x, name=mentee_role)]
+        mentees = [x for x in members if has_role(ctx.guild, x, name=mentee_role_name)]
+        admins = [x for x in members if not has_role(ctx.guild, x, name=mentee_role_name)]
 
         split_mentees = list(chunks(mentees, groups))
         split_admins = list(chunks(admins, groups))
@@ -979,8 +979,8 @@ async def process_tickets(message):
     if message.author.id != bot.user.id:
         if message.channel.id == channel_need_help:
             admin_roles = [
-                get(message.guild.roles, name=mentor_role),
-                get(message.guild.roles, name=professor_role),
+                get(message.guild.roles, name=mentor_role_name),
+                get(message.guild.roles, name=professor_role_name),
             ]
             if id_not_in_q(message.author.id):
                 await add_ticket(message.author, message.content, admin_roles)
@@ -997,7 +997,7 @@ async def wide(ctx):
             await ctx.send(file=discord.File(buf, "wide.png"))
 
 @bot.command("presence")
-@commands.has_role(mentor_role)
+@commands.has_role(mentor_role_name)
 async def presence(ctx, *args):
     status = args[-1]
     if hasattr(discord.Status, status):
@@ -1031,7 +1031,7 @@ When I see you again...
 
 # Purge all messages from a channel
 @bot.command(name="purge")
-@commands.has_role(mentor_role)
+@commands.has_role(mentor_role_name)
 async def purge(ctx, limit=10):
     if limit == None or int(limit) > 50:
         limit = 50
@@ -1039,7 +1039,7 @@ async def purge(ctx, limit=10):
 
 
 @bot.command(name="rmuser")
-@commands.has_role(mentor_role)
+@commands.has_role(mentor_role_name)
 async def rm_user(ctx, uid):
     uid = int(uid)
     state["student_map"].pop(uid, None)
@@ -1050,7 +1050,7 @@ async def rm_user(ctx, uid):
 
 
 @bot.command(name="adduser")
-@commands.has_role(mentor_role)
+@commands.has_role(mentor_role_name)
 async def add_user(ctx, uid, email):
     uid = int(uid)
     state["student_map"][uid] = email
@@ -1061,14 +1061,14 @@ async def add_user(ctx, uid, email):
 
 
 @bot.command(name="userinfo")
-@commands.has_role(mentor_role)
+@commands.has_role(mentor_role_name)
 async def user_info(ctx, uid):
     for k, v in state["student_map"].items():
         if str(k) == uid or v == uid:
             s = students[state["student_map"][int(uid)]] if str(k) == uid else students[v]
 
             embed = discord.Embed(title=f"{s.first} {s.last} ({s.preferred})")
-            embed.add_field(name=mentor_role, value=s.mentor(mentors).first)
+            embed.add_field(name=mentor_role_name, value=s.mentor(mentors).first)
             embed.add_field(name="Email", value=s.email)
             embed.add_field(name="Instr", value=s.instr)
             embed.add_field(name="Group ident", value=s.group_ident(students))
@@ -1084,7 +1084,7 @@ async def user_info(ctx, uid):
 
 
 @bot.command(name="syncmentorchannels")
-@commands.has_role(mentor_role)
+@commands.has_role(mentor_role_name)
 async def sync_mentor_channels(ctx):
     for channel in ctx.guild.voice_channels:
         if channel.name.startswith("mentor--"):
@@ -1098,17 +1098,17 @@ async def sync_mentor_channels(ctx):
                 nc = await ctx.guild.create_voice_channel(role.name, bitrate=64000, user_limit=0, category=mentors)
                 await nc.set_permissions(ctx.guild.default_role, view_channel=False)
                 await nc.set_permissions(
-                    get(ctx.guild.roles, name=professor_role), view_channel=True
+                    get(ctx.guild.roles, name=professor_role_name), view_channel=True
                 )
                 await nc.set_permissions(
-                    get(ctx.guild.roles, name=mentor_role), view_channel=True
+                    get(ctx.guild.roles, name=mentor_role_name), view_channel=True
                 )
                 await nc.set_permissions(role, view_channel=True)
 
     print("sync complete")
 
 @bot.command(name="syncroles")
-@commands.has_role(mentor_role)
+@commands.has_role(mentor_role_name)
 async def sync_roles(ctx):
     # We first purge all roles
     for role in ctx.guild.roles:
@@ -1124,7 +1124,7 @@ async def sync_roles(ctx):
             await channel.delete()
 
     # Remove Mentee role
-    role = get(ctx.guild.roles, name=mentee_role)
+    role = get(ctx.guild.roles, name=mentee_role_name)
     for m in ctx.guild.members:
         try:
             await m.remove_roles(role)
@@ -1141,7 +1141,7 @@ async def sync_roles(ctx):
 
 
 @bot.command(name="purgeroles")
-@commands.has_role(mentor_role)
+@commands.has_role(mentor_role_name)
 async def purge_roles(ctx):
     for role in ctx.guild.roles:
         if role.name.startswith("pair--") or role.name.startswith("mentor--"):
@@ -1159,7 +1159,7 @@ async def purge_roles(ctx):
     state["student_map"] = {}
 
     # Remove Mentee role
-    role_names = (mentee_role,)
+    role_names = (mentee_role_name,)
     roles = tuple(get(ctx.guild.roles, name=n) for n in role_names)
     for m in ctx.guild.members:
         try:
@@ -1168,12 +1168,12 @@ async def purge_roles(ctx):
             print(f"Couldn't remove roles from {m}")
 
 @bot.command(name="clearstudents")
-@commands.has_role(mentor_role)
+@commands.has_role(mentor_role_name)
 async def clear_students(ctx):
     state["student_map"] = {}
 
 @bot.command(name="shutdown")
-@commands.has_role(mentor_role)
+@commands.has_role(mentor_role_name)
 async def shutdown(ctx):
     await bot.close()
 
