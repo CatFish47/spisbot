@@ -718,7 +718,7 @@ def fmt_students():
         res += "{}\t{}\t{}\t{}".format(
             s.preferred,
             "\t".join([x.preferred for x in s.partners(students)]),
-            s.mentor(mentors).first,
+            "-".join([mentee.first for mentee in s.mentors(mentors)]),
             s.instr,
         )
         res += "\n"
@@ -734,7 +734,7 @@ def fmt_state():
             s.preferred,
             uid,
             "\t".join([x.preferred for x in s.partners(students)]),
-            s.mentor(mentors).first,
+            "-".join([mentee.first for mentee in s.mentors(mentors)]),
             s.instr,
         )
         res += "\n"
@@ -1547,7 +1547,7 @@ async def user_info(ctx, uid):
             s = students[state["student_map"][int(uid)]] if str(k) == uid else students[v]
 
             embed = discord.Embed(title=f"{s.first} {s.last} ({s.preferred})")
-            embed.add_field(name=mentor_role_name, value=s.mentor(mentors).first)
+            embed.add_field(name=mentor_role_name, value="-".join([mentee.first for mentee in s.mentors(mentors)]))
             embed.add_field(name="Email", value=s.email)
             embed.add_field(name="Instr", value=s.instr)
             embed.add_field(name="Group ident", value=s.group_ident(students))
