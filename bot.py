@@ -699,7 +699,7 @@ bot.remove_command("help")
 
 @bot.event
 async def on_ready():
-    activity = discord.Game(name="SPIS prep!")
+    activity = discord.Game(name="Dodging the spam flag")
     # activity = discord.Activity(
     #     type=discord.ActivityType.watching, name="your every move"
     # )
@@ -1021,6 +1021,7 @@ async def add_ticket(creator, description, admin_roles):
     # await msg.add_reaction("☑️")
 
     # Message user that their ticket was created
+    # TODO: Add back after appeal
     await creator.send(
         "Your ticket was created! A list of all the tickets in the queue is in the `#ticket-queue` channel.",
         embed=embed
@@ -1073,6 +1074,7 @@ async def add_ticket(creator, description, admin_roles):
                     title=f"Ticket #{tid} closed", description=closed_desc
                 )
 
+                # TODO: Add back after appeal
                 await creator.send(embed=closed_embed)
 
                 return
@@ -1090,6 +1092,7 @@ async def add_ticket(creator, description, admin_roles):
                     title=f"Ticket #{tid} resolved", description=resolved_desc
                 )
 
+                # TODO: Add back after appeal
                 await creator.send(embed=resolved_embed)
 
                 return
@@ -1109,6 +1112,7 @@ async def add_ticket(creator, description, admin_roles):
                 title=f"Ticket #{tid} unaccepted", description=unaccepted_desc
             )
 
+            # TODO: Add back after appeal
             await creator.send(embed=unaccepted_embed)
         else:
             print("Ticket", tid, "Accept")
@@ -1141,6 +1145,7 @@ async def add_ticket(creator, description, admin_roles):
             accept_embed = discord.Embed(
                 title=f"Ticket #{tid} accepted", description=accept_desc
             )
+            # TODO: Add back after appeal
             await creator.send(embed=accept_embed)
 
             # Edit the original message to reflect the current mentor
@@ -1652,6 +1657,5 @@ async def clear_students(ctx):
 @commands.has_role(mentor_role_name)
 async def shutdown(ctx):
     await bot.close()
-
 
 bot.run(token)

@@ -128,3 +128,8 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Shelves
+state.shelf.bak
+state.shelf.dat
+state.shelf.dir
